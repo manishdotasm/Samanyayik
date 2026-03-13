@@ -1,0 +1,61 @@
+{
+  "kind": "collectionType",
+  "collectionName": "notices",
+  "info": {
+    "singularName": "notice",
+    "pluralName": "notices",
+    "displayName": "notices"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title_en": {
+      "type": "string",
+      "required": true
+    },
+    "category": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Vacancy",
+        "Court Holiday",
+        "Press Release",
+        "Event",
+        "General"
+      ]
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "excerpt_en": {
+      "type": "string",
+      "required": true
+    },
+    "content_en": {
+      "type": "blocks",
+      "required": true
+    },
+    "isUrgent": {
+      "type": "boolean",
+      "required": false,
+      "default": false
+    },
+    "title_np": {
+      "type": "string"
+    },
+    "excerpt_np": {
+      "type": "string"
+    },
+    "content_np": {
+      "type": "blocks"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title_en",
+      "required": true
+    }
+  }
+}

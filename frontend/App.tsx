@@ -1,0 +1,70 @@
+
+
+import React from 'react';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { AccessibilityProvider } from './contexts/AccessibilityContext';
+import { Navbar } from './components/Layout/Navbar';
+import { Footer } from './components/Layout/Footer';
+import { AccessibilityPanel } from './components/Layout/AccessibilityPanel';
+import ScrollToTop from './components/Shared/ScrollToTop';
+import KeyboardShortcuts from './components/Shared/KeyboardShortcuts';
+import Home from './pages/Home';
+import LegalFeeCalculator from './pages/LegalFeeCalculator';
+import OtherCalculators from './pages/OtherCalculators';
+import PracticeAreasPage from './pages/PracticeAreasPage';
+import PracticeAreaDetailPage from './pages/PracticeAreaDetailPage';
+import About from './pages/About';
+import NewsPage from './pages/NewsPage';
+import NewsDetailPage from './pages/NewsDetailPage';
+import FAQPage from './pages/FAQPage';
+import NoticesPage from './pages/NoticesPage';
+import ResearchPage from './pages/ResearchPage';
+import ContactPage from './pages/ContactPage';
+import BookingPage from './pages/BookingPage';
+import TeamPage from './pages/TeamPage';
+import TeamDetailPage from './pages/TeamDetailPage';
+
+const App: React.FC = () => {
+  return (
+    <AccessibilityProvider>
+      <Router>
+        <ScrollToTop />
+        <KeyboardShortcuts />
+        <a 
+          href="#main-content" 
+          className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-secondary focus:text-white focus:rounded-lg focus:font-bold focus:outline-none focus:ring-2 focus:ring-yellow-400"
+        >
+          Skip to Content
+        </a>
+        <div className="min-h-screen flex flex-col bg-white transition-colors duration-300">
+          <Navbar />
+          <div className="flex-grow">
+            <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/team" element={<TeamPage />} />
+            <Route path="/team/:id" element={<TeamDetailPage />} />
+            <Route path="/calculator/legal-fee" element={<LegalFeeCalculator />} />
+            <Route path="/calculator/other" element={<OtherCalculators />} />
+            <Route path="/practice-areas" element={<PracticeAreasPage />} />
+            <Route path="/practice-areas/:serviceId" element={<PracticeAreaDetailPage />} />
+            <Route path="/news" element={<NewsPage />} />
+            <Route path="/news/:id" element={<NewsDetailPage />} />
+            <Route path="/notices" element={<NoticesPage />} />
+            <Route path="/research" element={<ResearchPage />} />
+            <Route path="/faq" element={<FAQPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/booking" element={<BookingPage />} />
+          </Routes>
+          </div>
+          <Footer />
+          <aside aria-label="Accessibility Tools">
+            <AccessibilityPanel />
+          </aside>
+        </div>
+      </Router>
+    </AccessibilityProvider>
+  );
+};
+
+export default App;

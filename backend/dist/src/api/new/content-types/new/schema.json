@@ -1,0 +1,69 @@
+{
+    "kind": "collectionType",
+    "collectionName": "news",
+    "info": {
+        "singularName": "new",
+        "pluralName": "news",
+        "displayName": "news"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "category": {
+            "type": "enumeration",
+            "required": true,
+            "enum": [
+                "News",
+                "Legal Commentary",
+                "Blog"
+            ]
+        },
+        "date": {
+            "type": "date",
+            "required": true
+        },
+        "image": {
+            "type": "media",
+            "multiple": false,
+            "allowedTypes": [
+                "images",
+                "files"
+            ]
+        },
+        "title_en": {
+            "type": "string",
+            "required": true
+        },
+        "description_en": {
+            "type": "text",
+            "required": true
+        },
+        "content_np": {
+            "type": "blocks"
+        },
+        "author_en": {
+            "type": "string",
+            "required": true
+        },
+        "title_np": {
+            "type": "string"
+        },
+        "description_np": {
+            "type": "text"
+        },
+        "content_en": {
+            "type": "blocks",
+            "required": true
+        },
+        "author_np": {
+            "type": "string"
+        },
+        "slug": {
+            "type": "uid",
+            "targetField": "title_en",
+            "required": true
+        }
+    }
+}

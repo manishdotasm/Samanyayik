@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "achievements",
+  "info": {
+    "singularName": "achievement",
+    "pluralName": "achievements",
+    "displayName": "achievements"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title_en": {
+      "type": "string",
+      "required": true
+    },
+    "title_np": {
+      "type": "string"
+    },
+    "case_title_en": {
+      "type": "string",
+      "required": true
+    },
+    "case_title_np": {
+      "type": "string"
+    },
+    "challenge_en": {
+      "type": "blocks",
+      "required": true
+    },
+    "challenge_np": {
+      "type": "blocks"
+    },
+    "action_en": {
+      "type": "blocks",
+      "required": true
+    },
+    "action_np": {
+      "type": "blocks"
+    },
+    "outcome_en": {
+      "type": "blocks",
+      "required": true
+    },
+    "outcome_np": {
+      "type": "blocks"
+    }
+  }
+}
