@@ -10,6 +10,7 @@ import {
 import { AppointmentCTA } from '../components/Shared/AppointmentCTA';
 import { useAccessibility } from '../contexts/AccessibilityContext';
 import { TRANSLATIONS } from '../constants';
+import { usePageTitle } from '../hooks/usePageTitle';
 
 // --- Types ---
 
@@ -109,6 +110,7 @@ const getCommission = (amount: number) => {
 // --- Main Component ---
 
 const OtherCalculators: React.FC = () => {
+  usePageTitle('Other Calculators');
   const { language } = useAccessibility();
   const t = TRANSLATIONS[language];
   
@@ -233,7 +235,7 @@ const OtherCalculators: React.FC = () => {
   };
 
   return (
-    <main id="main-content" tabIndex={-1} className="flex-grow min-h-[250vh] bg-white text-black font-sans flex flex-col relative">
+    <main id="main-content" lang={language === 'np' ? 'ne' : 'en'} tabIndex={0} className="flex-grow min-h-[250vh] bg-white text-black font-sans flex flex-col relative">
       {/* Header */}
       <div className="bg-white py-16 md:py-24 border-b border-gray-200 flex-shrink-0">
         <div className="max-w-4xl mx-auto px-4 text-center">
@@ -258,11 +260,12 @@ const OtherCalculators: React.FC = () => {
               <p className="text-green-100 text-sm mt-2 font-sans font-bold opacity-90">Buy/Sell breakdown with fees & capital gain</p>
             </div>
             <div className="p-8 space-y-8">
-              <form onSubmit={handleShareCalculate} className="space-y-6">
+              <form onSubmit={handleShareCalculate} className="space-y-6" aria-label="Share Transaction Calculator Form">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-sans font-bold text-black mb-2">Transaction Type</label>
+                    <label htmlFor="share-transactionType" className="block text-sm font-sans font-bold text-black mb-2">Transaction Type</label>
                     <select
+                      id="share-transactionType"
                       value={transactionType}
                       onChange={(e) => setTransactionType(e.target.value as TransactionType)}
                       className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:border-secondary focus:ring-0 outline-none text-black shadow-sm font-sans"
@@ -272,37 +275,43 @@ const OtherCalculators: React.FC = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-sans font-bold text-black mb-2">Share Quantity</label>
+                    <label htmlFor="share-quantity" className="block text-sm font-sans font-bold text-black mb-2">Share Quantity</label>
                     <input
+                      id="share-quantity"
                       type="number"
                       min="1"
                       value={shareQuantity}
                       onChange={(e) => setShareQuantity(e.target.value)}
                       placeholder="e.g., 100"
                       className="w-full px-4 py-3 text-lg bg-white border-2 border-gray-300 rounded-lg focus:border-secondary focus:ring-0 outline-none text-black shadow-sm font-sans"
+                      aria-describedby={shareError ? "error-share-calc" : undefined}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-sans font-bold text-black mb-2">Purchase Price (per share, Rs.)</label>
+                    <label htmlFor="share-purchasePrice" className="block text-sm font-sans font-bold text-black mb-2">Purchase Price (per share, Rs.)</label>
                     <input
+                      id="share-purchasePrice"
                       type="number"
                       min="0.01"
                       value={purchasePrice}
                       onChange={(e) => setPurchasePrice(e.target.value)}
                       placeholder="Enter buy price"
                       className="w-full px-4 py-3 text-lg bg-white border-2 border-gray-300 rounded-lg focus:border-secondary focus:ring-0 outline-none text-black shadow-sm font-sans"
+                      aria-describedby={shareError ? "error-share-calc" : undefined}
                     />
                   </div>
                   {transactionType === 'sell' && (
                     <div>
-                      <label className="block text-sm font-sans font-bold text-black mb-2">Sell Price (per share, Rs.)</label>
+                      <label htmlFor="share-sellPrice" className="block text-sm font-sans font-bold text-black mb-2">Sell Price (per share, Rs.)</label>
                       <input
+                        id="share-sellPrice"
                         type="number"
                         min="0.01"
                         value={sellPrice}
                         onChange={(e) => setSellPrice(e.target.value)}
                         placeholder="e.g., 1500"
                         className="w-full px-4 py-3 text-lg bg-white border-2 border-gray-300 rounded-lg focus:border-secondary focus:ring-0 outline-none text-black shadow-sm font-sans"
+                        aria-describedby={shareError ? "error-share-calc" : undefined}
                       />
                     </div>
                   )}
@@ -325,8 +334,9 @@ const OtherCalculators: React.FC = () => {
 
                     <div className="space-y-3">
                       <div>
-                        <label className="block text-sm font-sans font-bold text-black mb-2">Investor Type</label>
+                        <label htmlFor="share-investorType" className="block text-sm font-sans font-bold text-black mb-2">Investor Type</label>
                         <select
+                          id="share-investorType"
                           value={investorType}
                           onChange={(e) => setInvestorType(e.target.value as 'individual' | 'institutional')}
                           className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:border-secondary focus:ring-0 outline-none text-black shadow-sm font-sans"
@@ -335,11 +345,12 @@ const OtherCalculators: React.FC = () => {
                           <option value="institutional">Institutional</option>
                         </select>
                       </div>
-
+ 
                       {investorType === 'individual' && (
                         <div>
-                          <label className="block text-sm font-sans font-bold text-black mb-2">Capital Gain Tax Rate (Individual)</label>
+                          <label htmlFor="share-individualTaxRate" className="block text-sm font-sans font-bold text-black mb-2">Capital Gain Tax Rate (Individual)</label>
                           <select
+                            id="share-individualTaxRate"
                             value={individualTaxRate}
                             onChange={(e) => setIndividualTaxRate(e.target.value)}
                             className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:border-secondary focus:ring-0 outline-none text-black shadow-sm font-sans"
@@ -354,9 +365,9 @@ const OtherCalculators: React.FC = () => {
                 )}
 
                 {shareError && (
-                  <div className="flex items-center gap-2 text-red-600 bg-red-50 border border-red-200 p-4 rounded-lg text-sm font-sans font-bold">
+                  <div id="error-share-calc" role="alert" className="flex items-center gap-2 text-red-600 bg-red-50 border border-red-200 p-4 rounded-lg text-sm font-sans font-bold">
                     <AlertCircle className="w-5 h-5" />
-                    {shareError}
+                    <span>Error: {shareError}</span>
                   </div>
                 )}
 
@@ -385,7 +396,7 @@ const OtherCalculators: React.FC = () => {
               {shareResult && (
                 <div className="space-y-8 animate-fade-in-up">
                   <div className="border-t border-gray-100 pt-6">
-                    <div className="bg-green-50 border-2 border-green-100 rounded-xl p-6">
+                    <div className="bg-green-50 border-2 border-green-100 rounded-xl p-6" aria-live="polite">
                       <div className="flex items-center gap-2 text-secondary text-sm font-sans font-bold uppercase tracking-wide">
                         <CheckCircle2 className="w-4 h-4" />
                         {shareResult.transactionType === 'buy' ? 'Buy Summary' : 'Sell Summary'}
@@ -410,58 +421,60 @@ const OtherCalculators: React.FC = () => {
                   {shareResult.transactionType === 'buy' && (
                     <div className="bg-white border-2 border-gray-200 rounded-xl overflow-hidden">
                       <table className="w-full text-sm">
+                        <caption className="sr-only">Buy-side share transaction fee breakdown and total cost.</caption>
                         <tbody className="divide-y divide-gray-100">
                           <tr>
-                            <td className="px-4 py-3 text-black font-sans font-semibold">Transaction Value</td>
+                            <th scope="row" className="px-4 py-3 text-left text-black font-sans font-semibold">Transaction Value</th>
                             <td className="px-4 py-3 text-right font-sans">{formatCurrency(shareResult.txnValue)}</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-3 text-black font-sans font-semibold">Total Payable</td>
+                            <th scope="row" className="px-4 py-3 text-left text-black font-sans font-semibold">Total Payable</th>
                             <td className="px-4 py-3 text-right font-sans font-bold text-secondary">{formatCurrency(shareResult.totalAmount)}</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-3 text-black font-sans font-semibold">Effective Cost / Share</td>
+                            <th scope="row" className="px-4 py-3 text-left text-black font-sans font-semibold">Effective Cost / Share</th>
                             <td className="px-4 py-3 text-right font-sans">{formatCurrency(shareResult.effectiveCostPerShare)}</td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   )}
-
+ 
                   {shareResult.transactionType === 'sell' && (
                     <div className="bg-white border-2 border-gray-200 rounded-xl overflow-hidden">
                       <table className="w-full text-sm">
+                        <caption className="sr-only">Sell-side share transaction fee breakdown, capital gains tax, and net receivable.</caption>
                         <tbody className="divide-y divide-gray-100">
                           <tr>
-                            <td className="px-4 py-3 text-black font-sans font-semibold">Sell Value</td>
+                            <th scope="row" className="px-4 py-3 text-left text-black font-sans font-semibold">Sell Value</th>
                             <td className="px-4 py-3 text-right font-sans">{formatCurrency(shareResult.sellValue)}</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-3 text-black font-sans font-semibold">Gross Receivable</td>
+                            <th scope="row" className="px-4 py-3 text-left text-black font-sans font-semibold">Gross Receivable</th>
                             <td className="px-4 py-3 text-right font-sans">{formatCurrency(shareResult.grossReceivable)}</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-3 text-black font-sans font-semibold">Cost Basis</td>
+                            <th scope="row" className="px-4 py-3 text-left text-black font-sans font-semibold">Cost Basis</th>
                             <td className="px-4 py-3 text-right font-sans">{formatCurrency(shareResult.costBasis)}</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-3 text-black font-sans font-semibold">Capital Gain</td>
+                            <th scope="row" className="px-4 py-3 text-left text-black font-sans font-semibold">Capital Gain</th>
                             <td className="px-4 py-3 text-right font-sans">{formatCurrency(shareResult.capitalGain)}</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-3 text-black font-sans font-semibold">Tax Rate</td>
+                            <th scope="row" className="px-4 py-3 text-left text-black font-sans font-semibold">Tax Rate</th>
                             <td className="px-4 py-3 text-right font-sans">{(shareResult.taxRate * 100).toFixed(1)}%</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-3 text-black font-sans font-semibold">Capital Gain Tax</td>
+                            <th scope="row" className="px-4 py-3 text-left text-black font-sans font-semibold">Capital Gain Tax</th>
                             <td className="px-4 py-3 text-right font-sans">{formatCurrency(shareResult.capitalGainTax)}</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-3 text-black font-sans font-semibold">Net Receivable</td>
+                            <th scope="row" className="px-4 py-3 text-left text-black font-sans font-semibold">Net Receivable</th>
                             <td className="px-4 py-3 text-right font-sans font-bold text-secondary">{formatCurrency(shareResult.netReceivable)}</td>
                           </tr>
                           <tr>
-                            <td className="px-4 py-3 text-black font-sans font-semibold">Profit / Loss</td>
+                            <th scope="row" className="px-4 py-3 text-left text-black font-sans font-semibold">Profit / Loss</th>
                             <td className={`px-4 py-3 text-right font-sans font-bold ${shareResult.profitLoss >= 0 ? 'text-green-700' : 'text-red-600'}`}>
                               {formatCurrency(shareResult.profitLoss)}
                             </td>
@@ -485,11 +498,11 @@ const OtherCalculators: React.FC = () => {
               <p className="text-green-100 text-sm mt-2 font-sans font-bold opacity-90">One-time fees from Chapter 6 (Sections 70-71)</p>
             </div>
             <div className="p-8 space-y-8">
-              <form onSubmit={handleFlatCalculate} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-sans font-bold text-black mb-3">
+              <form onSubmit={handleFlatCalculate} className="space-y-6" aria-label="Flat Fee Calculator Form">
+                <fieldset className="space-y-3">
+                  <legend className="block text-sm font-sans font-bold text-black mb-3">
                     Select scenario
-                  </label>
+                  </legend>
                   <div className="space-y-3">
                     {flatFeeOptions.map((option) => (
                       <label key={option.id} className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg hover:border-secondary transition-colors cursor-pointer">
@@ -509,7 +522,7 @@ const OtherCalculators: React.FC = () => {
                       </label>
                     ))}
                   </div>
-                </div>
+                </fieldset>
 
                 <div className="flex gap-4">
                   <button
@@ -536,7 +549,7 @@ const OtherCalculators: React.FC = () => {
               {flatResult !== null && (
                 <div className="space-y-6 animate-fade-in-up">
                   <div className="border-t border-gray-100 pt-6">
-                    <div className="bg-green-50 border-2 border-green-100 rounded-xl p-6 text-center">
+                    <div className="bg-green-50 border-2 border-green-100 rounded-xl p-6 text-center" aria-live="polite">
                       <span className="text-secondary text-sm font-sans font-bold uppercase tracking-wide">Flat Fee</span>
                       <div className="text-4xl font-serif font-bold text-black mt-2 mb-3">
                         {formatCurrency(flatResult)}

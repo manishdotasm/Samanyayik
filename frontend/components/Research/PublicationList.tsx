@@ -149,31 +149,29 @@ export const PublicationList: React.FC = () => {
 
                 <div className="flex-shrink-0 w-full md:w-auto mt-4 md:mt-0">
                      {pub.url ? (
-                        <a 
+                        <Button 
                             href={pub.url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            // Only add download attribute for non-links to hint browser
                             download={pub.type !== 'LINK'}
-                            className="inline-block w-full md:w-auto"
+                            className="w-full md:w-auto"
                             aria-label={`${pub.type === 'LINK' ? t.visitLink : t.download} - ${pub.title}`}
+                            variant="outline"
                         >
-                             <Button variant="outline" className="w-full md:w-auto flex items-center justify-center gap-2">
-                                {pub.type === 'LINK' ? (
-                                    <>
-                                        {t.visitLink} <ExternalLink className="w-4 h-4" />
-                                    </>
-                                ) : (
-                                    <>
-                                        {t.download} <Download className="w-4 h-4" />
-                                    </>
-                                )}
-                             </Button>
-                        </a>
+                            {pub.type === 'LINK' ? (
+                                <>
+                                    {t.visitLink} <ExternalLink className="w-4 h-4" />
+                                </>
+                            ) : (
+                                <>
+                                    {t.download} <Download className="w-4 h-4" />
+                                </>
+                            )}
+                        </Button>
                      ) : (
-                         <Button variant="outline" disabled className="w-full md:w-auto flex items-center justify-center gap-2 opacity-50 cursor-not-allowed">
+                          <Button variant="outline" disabled className="w-full md:w-auto opacity-50 cursor-not-allowed">
                             {t.download} <Download className="w-4 h-4" />
-                         </Button>
+                          </Button>
                      )}
                 </div>
             </div>

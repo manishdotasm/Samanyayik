@@ -29,6 +29,7 @@ export const FAQList: React.FC = () => {
       case 'Accessibility': return 'पहुँचयोग्यता';
       case 'Labor Law': return 'श्रम कानून';
       case 'Privacy & Ethics': return 'गोपनीयता र नैतिकता';
+      case 'Glossary': return 'शब्दावली';
       default: return cat;
     }
   }
@@ -41,7 +42,8 @@ export const FAQList: React.FC = () => {
     'Research & Policy', 
     'Accessibility', 
     'Labor Law', 
-    'Privacy & Ethics'
+    'Privacy & Ethics',
+    'Glossary'
   ];
 
   const filteredFAQs = items.filter((item) => {
@@ -78,6 +80,7 @@ export const FAQList: React.FC = () => {
           <button
             key={cat}
             onClick={() => { setActiveCategory(cat); setOpenIndex(null); }}
+            aria-pressed={activeCategory === cat}
             className={`px-5 py-2 rounded-full font-sans font-bold text-sm transition-all duration-300 border-2 
               ${activeCategory === cat 
                 ? 'bg-secondary text-white border-secondary' 
@@ -96,29 +99,33 @@ export const FAQList: React.FC = () => {
               key={item.id} 
               className={`border-2 rounded-lg bg-white transition-all duration-300 ${openIndex === item.id ? 'border-secondary shadow-md' : 'border-gray-100 hover:border-gray-300'}`}
             >
-              <h2>
                 <button
+                  id={`faq-button-${item.id}`}
                   onClick={() => toggleAccordion(item.id)}
                   className="w-full flex items-center justify-between p-6 text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 rounded-lg"
                   aria-expanded={openIndex === item.id}
+                  aria-controls={`faq-panel-${item.id}`}
                 >
-                  <span className={`text-xl font-serif font-bold ${openIndex === item.id ? 'text-secondary' : 'text-black'}`}>
+                  <h2 className={`text-xl font-serif font-bold ${openIndex === item.id ? 'text-secondary' : 'text-black'}`}>
                     {item.question}
-                  </span>
+                  </h2>
                   {openIndex === item.id ? (
-                    <ChevronUp className="w-6 h-6 text-secondary flex-shrink-0 ml-4" />
+                    <ChevronUp className="w-6 h-6 text-secondary flex-shrink-0 ml-4" aria-hidden="true" />
                   ) : (
-                    <ChevronDown className="w-6 h-6 text-gray-400 flex-shrink-0 ml-4" />
+                    <ChevronDown className="w-6 h-6 text-gray-400 flex-shrink-0 ml-4" aria-hidden="true" />
                   )}
                 </button>
-              </h2>
               
               <div 
+                id={`faq-panel-${item.id}`}
+                role="region"
+                aria-labelledby={`faq-button-${item.id}`}
                 className={`overflow-hidden transition-all duration-300 ease-in-out ${openIndex === item.id ? 'max-h-[40rem] opacity-100' : 'max-h-0 opacity-0'}`}
               >
-                <div className="px-8 py-8 text-black font-sans font-normal leading-relaxed border-t border-gray-100 mt-4 text-lg bg-gray-50/30">
-                  {item.answer}
-                </div>
+                <div 
+                  className="px-8 py-8 text-black font-sans font-normal leading-relaxed border-t border-gray-100 mt-4 text-lg bg-gray-50/30"
+                  dangerouslySetInnerHTML={{ __html: item.answer }}
+                />
               </div>
             </div>
           ))

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { extractTextFromBlocks, fetchAPI, renderStrapiBlocks } from '../utils/api';
 import { useAccessibility } from '../contexts/AccessibilityContext';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { TRANSLATIONS } from '../constants';
 import { NewsItem } from '../types';
 import { Calendar, User, Loader2 } from 'lucide-react';
@@ -13,9 +14,15 @@ const NewsDetailPage: React.FC = () => {
     // We don't necessarily need 't' if we just copy the exact modal content structure,
     // but we might need it for fallback text.
     
+    // We don't necessarily need 't' if we just copy the exact modal content structure,
+    // but we might need it for fallback text.
+    
     const [newsItem, setNewsItem] = useState<NewsItem | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    // Update page title when newsItem loads
+    usePageTitle(newsItem?.title || 'News Article');
 
     useEffect(() => {
         const loadNewsItem = async () => {
@@ -97,7 +104,7 @@ const NewsDetailPage: React.FC = () => {
 
     // Matching the Modal Content Structure from NewsGrid.tsx
     return (
-        <main id="main-content" tabIndex={-1} className="flex-grow bg-white min-h-screen py-12 px-4 md:px-8">
+        <main id="main-content" lang={language === 'np' ? 'ne' : 'en'} tabIndex={0} className="flex-grow bg-white min-h-screen py-12 px-4 md:px-8">
              <div className="max-w-4xl mx-auto">
                 <article className="prose max-w-none">
                     <img 
@@ -106,20 +113,9 @@ const NewsDetailPage: React.FC = () => {
                       className="w-full h-96 object-cover rounded-lg mb-8 shadow-sm"
                     />
                     
-                    <div className="flex flex-wrap items-center gap-6 mb-8 pb-6 border-b border-gray-100">
-                       <div className="flex items-center text-sm font-sans font-bold text-black">
-                          <User className="w-5 h-5 mr-2 text-secondary" />
-                          <span className="text-gray-500 mr-1">Written by</span> {newsItem.author}
-                       </div>
-                       <div className="flex items-center text-sm font-sans font-bold text-black">
-                          <Calendar className="w-5 h-5 mr-2 text-secondary" />
-                          {newsItem.date}
-                       </div>
-                    </div>
-
-                    <h2 className="text-3xl md:text-4xl font-serif font-bold text-black mb-8 leading-tight">
+                    <h1 className="text-3xl md:text-4xl font-serif font-bold text-black mb-8 leading-tight">
                       {newsItem.title}
-                    </h2>
+                    </h1>
                     
                     <div 
                         className="text-black font-sans font-normal leading-relaxed space-y-6 text-lg" 

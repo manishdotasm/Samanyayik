@@ -4,7 +4,11 @@ import { TRANSLATIONS, TEAM_MEMBERS, TEAM_MEMBERS_NP } from '../../constants';
 // import { TeamMember } from '../../types';
 import { Link } from 'react-router-dom';
 
-export const Team: React.FC = () => {
+interface TeamProps {
+  hideHeader?: boolean;
+}
+
+export const Team: React.FC<TeamProps> = ({ hideHeader = false }) => {
   const { language } = useAccessibility();
   const t = TRANSLATIONS[language];
   const members = language === 'np' ? TEAM_MEMBERS_NP : TEAM_MEMBERS;
@@ -12,7 +16,7 @@ export const Team: React.FC = () => {
   return (
     <section className="py-24 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-serif font-bold text-center mb-16 text-black">{t.ourTeamTitle}</h2>
+        {!hideHeader && <h2 className="text-4xl font-serif font-bold text-center mb-16 text-black">{t.ourTeamTitle}</h2>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {members.map((member, index) => (
@@ -25,7 +29,7 @@ export const Team: React.FC = () => {
                   <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-secondary transition-colors duration-300">
                     <img 
                         src={member.image} 
-                        alt={member.name} 
+                        alt={`Portrait photo of ${member.name}`} 
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   </div>

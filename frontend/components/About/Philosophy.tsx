@@ -2,13 +2,15 @@
 
 
 import React from 'react';
-import { ABOUT_CONTENT, ABOUT_CONTENT_NP, TRANSLATIONS } from '../../constants';
+import { ABOUT_CONTENT, ABOUT_CONTENT_NP, SIMPLIFIED_ABOUT_CONTENT, SIMPLIFIED_ABOUT_CONTENT_NP, TRANSLATIONS } from '../../constants';
 import { BookOpen, Scale, Eye, BrainCircuit, Mic2, FileSearch } from 'lucide-react';
 import { useAccessibility } from '../../contexts/AccessibilityContext';
 
 export const Philosophy: React.FC = () => {
-  const { language } = useAccessibility();
-  const content = language === 'np' ? ABOUT_CONTENT_NP : ABOUT_CONTENT;
+  const { language, simplifiedMode } = useAccessibility();
+  const content = simplifiedMode
+    ? (language === 'np' ? SIMPLIFIED_ABOUT_CONTENT_NP : SIMPLIFIED_ABOUT_CONTENT)
+    : (language === 'np' ? ABOUT_CONTENT_NP : ABOUT_CONTENT);
   const t = TRANSLATIONS[language];
 
   return (
@@ -30,9 +32,9 @@ export const Philosophy: React.FC = () => {
                     <div className="bg-green-50 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:bg-secondary transition-colors">
                         <BookOpen className="w-6 h-6 text-secondary group-hover:text-white transition-colors" />
                     </div>
-                    <h4 className="text-lg font-serif font-bold text-gray-900 mb-2">
+                    <h3 className="text-lg font-serif font-bold text-gray-900 mb-2">
                         {language === 'np' ? "नीति संक्षेपहरू" : "Policy Briefs"}
-                    </h4>
+                    </h3>
                     <p className="text-gray-700 font-sans font-normal leading-relaxed">
                         {language === 'np' 
                           ? "समावेशी सुधारहरूका लागि उच्च-स्तरीय विधायी ढाँचाहरू र वकालत उपकरणहरू मस्यौदा गर्दै।" 
@@ -43,9 +45,9 @@ export const Philosophy: React.FC = () => {
                     <div className="bg-green-50 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:bg-secondary transition-colors">
                         <Scale className="w-6 h-6 text-secondary group-hover:text-white transition-colors" />
                     </div>
-                    <h4 className="text-lg font-serif font-bold text-gray-900 mb-2">
+                    <h3 className="text-lg font-serif font-bold text-gray-900 mb-2">
                          {language === 'np' ? "ग्याप विश्लेषण" : "Gap Analysis"}
-                    </h4>
+                    </h3>
                     <p className="text-gray-700 font-sans font-normal leading-relaxed">
                         {language === 'np' 
                           ? "कानूनी व्यवस्थाहरू र वास्तविक यथार्थ बीचको महत्वपूर्ण खाडल पहिचान गर्दै।" 

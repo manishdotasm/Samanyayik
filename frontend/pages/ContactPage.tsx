@@ -7,9 +7,11 @@ import { Button } from '../components/UI/Button';
 import { Modal } from '../components/Shared/Modal';
 import { DISCLAIMER_TEXT, TRANSLATIONS } from '../constants';
 import { useAccessibility } from '../contexts/AccessibilityContext';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { API_URL } from '../utils/api';
 
 const ContactPage: React.FC = () => {
+  usePageTitle('Contact Us');
   const { language } = useAccessibility();
   const t = TRANSLATIONS[language];
   
@@ -46,8 +48,8 @@ const ContactPage: React.FC = () => {
 
   const validateForm = () => {
     const newErrors: any = {};
-    if (!formData.name.match(/^[a-zA-Z\s]+$/)) newErrors.name = "Name must contain only alphabets";
-    if (!formData.phone.match(/^\d{10}$/)) newErrors.phone = "Phone must be 10 digits numeric";
+    if (!formData.name.match(/^[a-zA-Z\s]+$/)) newErrors.name = "Full Name must contain only alphabets and spaces (e.g. John Doe)";
+    if (!formData.phone.match(/^\d{10}$/)) newErrors.phone = "Phone Number must be exactly 10 digits (e.g. 9861292120)";
     if (formData.email && !formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = "Invalid email format";
     
     // Message OR Voice Validation
@@ -147,7 +149,7 @@ const ContactPage: React.FC = () => {
   };
 
   return (
-    <main id="main-content" tabIndex={-1} className="flex-grow bg-white min-h-screen">
+    <main id="main-content" lang={language === 'np' ? 'ne' : 'en'} tabIndex={0} className="flex-grow bg-white min-h-screen">
       {/* Header */}
       <div className="bg-gray-50 py-16 md:py-24 border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 text-center">
@@ -271,7 +273,7 @@ const ContactPage: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-8" aria-label="Contact Form">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
                       <label htmlFor="name" className="block text-sm font-sans font-bold text-black mb-3">{t.fullName} *</label>
@@ -279,25 +281,37 @@ const ContactPage: React.FC = () => {
                         type="text"
                         id="name"
                         name="name"
+                        autoComplete="name"
+                        aria-describedby={errors.name ? "error-contact-name" : undefined}
                         value={formData.name}
                         onChange={handleChange}
                         className={`w-full px-4 py-3 rounded border-2 bg-white shadow-sm focus:border-secondary focus:ring-1 focus:ring-secondary outline-none text-black font-sans ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
-                        placeholder={language === 'np' ? "पुरा नाम" : "John Doe"}
+                        placeholder={language === 'np' ? "पुरा नाम" : "Full Name"}
                       />
-                      {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+                      {errors.name && (
+                        <p id="error-contact-name" role="alert" className="text-red-500 text-xs mt-1 flex items-center gap-1 font-bold">
+                          <AlertCircle className="w-3.5 h-3.5" /> <span>Error: {errors.name}</span>
+                        </p>
+                      )}
                     </div>
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-sans font-bold text-black mb-3">{t.phoneNumber} *</label>
+                      <label htmlFor="phone" className="block text-sm font-sans font-bold text-black mb-3">{t.phoneNumber} * <span className="text-xs font-normal text-gray-500">(exactly 10 digits, e.g. 9861292120)</span></label>
                       <input
                         type="tel"
                         id="phone"
                         name="phone"
+                        autoComplete="tel"
+                        aria-describedby={errors.phone ? "error-contact-phone" : undefined}
                         value={formData.phone}
                         onChange={handleChange}
                         className={`w-full px-4 py-3 rounded border-2 bg-white shadow-sm focus:border-secondary focus:ring-1 focus:ring-secondary outline-none text-black font-sans ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
-                        placeholder="+977 98..."
+                        placeholder={language === 'np' ? "फोन नम्बर" : "Phone Number"}
                       />
-                      {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                      {errors.phone && (
+                        <p id="error-contact-phone" role="alert" className="text-red-500 text-xs mt-1 flex items-center gap-1 font-bold">
+                          <AlertCircle className="w-3.5 h-3.5" /> <span>Error: {errors.phone}</span>
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -308,12 +322,18 @@ const ContactPage: React.FC = () => {
                         type="email"
                         id="email"
                         name="email"
+                        autoComplete="email"
+                        aria-describedby={errors.email ? "error-contact-email" : undefined}
                         value={formData.email}
                         onChange={handleChange}
                         className={`w-full px-4 py-3 rounded border-2 bg-white shadow-sm focus:border-secondary focus:ring-1 focus:ring-secondary outline-none text-black font-sans ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
-                        placeholder="example@gmail.com"
+                        placeholder={language === 'np' ? "इमेल ठेगाना" : "Email Address"}
                       />
-                      {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                      {errors.email && (
+                        <p id="error-contact-email" role="alert" className="text-red-500 text-xs mt-1 flex items-center gap-1 font-bold">
+                          <AlertCircle className="w-3.5 h-3.5" /> <span>Error: {errors.email}</span>
+                        </p>
+                      )}
                     </div>
                     <div>
                       <label htmlFor="subject" className="block text-sm font-sans font-bold text-black mb-3">{t.subject}</label>
@@ -324,7 +344,7 @@ const ContactPage: React.FC = () => {
                         value={formData.subject}
                         onChange={handleChange}
                         className="w-full px-4 py-3 rounded border-2 border-gray-300 bg-white shadow-sm focus:border-secondary focus:ring-1 focus:ring-secondary outline-none text-black font-sans"
-                        placeholder={language === 'np' ? "कानूनी सोधपुछ" : "Legal Inquiry"}
+                        placeholder={language === 'np' ? "विषय" : "Subject"}
                       />
                     </div>
                   </div>
@@ -337,10 +357,15 @@ const ContactPage: React.FC = () => {
                       value={formData.message}
                       onChange={handleChange}
                       rows={6}
+                      aria-describedby={errors.message ? "error-contact-message" : undefined}
                       className={`w-full px-4 py-3 rounded border-2 bg-white shadow-sm focus:border-secondary focus:ring-1 focus:ring-secondary outline-none text-black resize-none font-sans ${errors.message ? 'border-red-500' : 'border-gray-300'}`}
-                      placeholder={language === 'np' ? "हामी तपाईंलाई कसरी मद्दत गर्न सक्छौं?" : "How can we help you?"}
+                      placeholder={language === 'np' ? "सन्देश" : "Message"}
                     ></textarea>
-                    {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+                    {errors.message && (
+                      <p id="error-contact-message" role="alert" className="text-red-500 text-xs mt-1 flex items-center gap-1 font-bold">
+                        <AlertCircle className="w-3.5 h-3.5" /> <span>Error: {errors.message}</span>
+                      </p>
+                    )}
                   </div>
 
                   {/* Voice Message */}

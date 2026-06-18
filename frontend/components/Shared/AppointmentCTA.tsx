@@ -43,11 +43,9 @@ export const AppointmentCTA: React.FC = () => {
                 </div>
 
                 <div className="mt-6">
-                <Link to="/booking">
-                <Button className="w-full md:w-auto shadow-xl shadow-green-900/20">
-                    {t.bookAppointment}
-                </Button>
-                </Link>
+                  <Button to="/booking" className="w-full md:w-auto shadow-xl shadow-green-900/20">
+                      {t.bookAppointment}
+                  </Button>
                 </div>
             </div>
         </div>

@@ -271,6 +271,22 @@ export const TRANSLATIONS: Record<Language, ContentText> = {
   }
 };
 
+export const SIMPLIFIED_TRANSLATIONS: Record<Language, Partial<ContentText>> = {
+  en: {
+    heroContext: "Legal Help for You",
+    heroTitle: "Fairness for everyone, everywhere.",
+    heroSubtitle: "We help you with legal issues and protect your rights.",
+    introText: "Samanyayik is a group of lawyers who help people get justice. We support everyone, especially people with disabilities and groups who are treated unfairly. We do research and talk to the government to make better laws for everyone."
+  },
+  np: {
+    heroContext: "सजिलो कानूनी सहयोग",
+    heroTitle: "सबैका लागि निष्पक्षता र न्याय।",
+    heroSubtitle: "हामी तपाईलाई कानूनी समस्याहरूमा मद्दत गर्छौं र तपाईको अधिकारको रक्षा गर्छौं।",
+    introText: "सामन्यायिक वकिलहरूको समूह हो जसले मानिसहरूलाई न्याय पाउन मद्दत गर्दछ। हामी सबैलाई, विशेष गरी अपाङ्गता भएका व्यक्तिहरू र अन्यायमा परेकाहरूलाई मद्दत गर्छौं। हामी अनुसन्धान गर्छौं र सबैका लागि राम्रो कानून बनाउन सरकारसँग कुरा गर्छौं।"
+  }
+};
+
+
 export const WHY_US_FEATURES: WhyUsFeature[] = [
   {
     iconName: 'ShieldCheck',
@@ -345,6 +361,34 @@ export const ABOUT_CONTENT = {
     subtext: "At Samanyayik, we combine the strategy of long-term policy research with the tactics of aggressive legal litigation to ensure victory for the causes of justice and equality."
   }
 };
+
+export const SIMPLIFIED_ABOUT_CONTENT = {
+  whoWeAre: {
+    title: "Who We Are",
+    text: "Samanyayik is a group of young lawyers. We work to make laws fair in Nepal. We help people in court and also study how to make better laws."
+  },
+  mission: {
+    title: "Our Mission",
+    text: "We protect human rights for everyone. We especially help people with disabilities, LGBTQ+ groups, and people who face discrimination. We believe everyone has a right to justice."
+  },
+  researchHub: {
+    title: "Research and Better Laws",
+    text: "We study legal problems to find out what is not working. We write reports to show what needs to change, like making tests easy for blind students."
+  },
+  approach: {
+    title: "Our Approach",
+    text: "We have people with disabilities in our team. We look at problems from different sides to see how rules hurt people. We always work safely and protect our clients."
+  },
+  impact: {
+    title: "Our Success",
+    text: "We won an important case in court that gives free higher education to persons with disabilities. We use the law to help make the world a better place."
+  },
+  quote: {
+    text: "We use smart plans and court cases to win justice and equality for all.",
+    subtext: "We combine research with court work to make sure everyone is treated fairly."
+  }
+};
+
 
 export const ACHIEVEMENT_CASES: AchievementCase[] = [
   {
@@ -618,6 +662,34 @@ export const ABOUT_CONTENT_NP = {
     subtext: "सामन्यायिकमा, हामी न्याय र समानताका कारणहरूको विजय सुनिश्चित गर्न आक्रामक कानूनी मुद्दाको कार्यनीतिसँग दीर्घकालीन नीति अनुसन्धानको रणनीति जोड्छौं।"
   }
 };
+
+export const SIMPLIFIED_ABOUT_CONTENT_NP = {
+  whoWeAre: {
+    title: "हामी को हौं",
+    text: "सामन्यायिक युवा वकिलहरूको समूह हो। हामी नेपालमा कानूनलाई निष्पक्ष बनाउन काम गर्छौं। हामी अदालतमा मानिसहरूलाई मद्दत गर्छौं र राम्रो कानून बनाउन अध्ययन पनि गर्छौं।"
+  },
+  mission: {
+    title: "हाम्रो लक्ष्य",
+    text: "हामी सबैका लागि मानव अधिकारको रक्षा गर्छौं। हामी विशेष गरी अपाङ्गता भएका व्यक्तिहरू, लैङ्गिक अल्पसंख्यकहरू र भेदभाव भोग्नेहरूलाई मद्दत गर्छौं। हामी विश्वास गर्छौं कि न्याय पाउनु सबैको अधिकार हो।"
+  },
+  researchHub: {
+    title: "अनुसन्धान र राम्रो कानून",
+    text: "हामी कानूनी समस्याहरूको अध्ययन गर्छौं ताकि के काम गरिरहेको छैन भनेर पत्ता लगाउन सकियोस्। हामी दृष्टिविहीन विद्यार्थीहरूका लागि परीक्षा सजिलो बनाउने जस्ता सुधारका लागि प्रतिवेदनहरू लेख्छौं।"
+  },
+  approach: {
+    title: "हाम्रो दृष्टिकोण",
+    text: "हाम्रो टोलीमा अपाङ्गता भएका व्यक्तिहरू हुनुहुन्छ। हामी समस्याहरूलाई धेरै पक्षबाट हेर्छौं र जहिले पनि सुरक्षित रूपमा काम गर्छौं।"
+  },
+  impact: {
+    title: "हाम्रो सफलता",
+    text: "हामीले अदालतमा एउटा महत्वपूर्ण मुद्दा जित्यौं जसले अपाङ्गता भएका व्यक्तिहरूलाई नि:शुल्क उच्च शिक्षा दिन्छ। हामी संसारलाई राम्रो बनाउन कानूनको प्रयोग गर्छौं।"
+  },
+  quote: {
+    text: "हामी सबैका लागि न्याय र समानता सुनिश्चित गर्न काम गर्छौं।",
+    subtext: "हामी सबैलाई निष्पक्ष व्यवहार गरिएको छ भनी सुनिश्चित गर्न अनुसन्धान र अदालतको कामलाई जोड्छौं।"
+  }
+};
+
 
 export const ACHIEVEMENT_CASES_NP: AchievementCase[] = [
   {
@@ -917,6 +989,30 @@ export const FAQ_ITEMS_NP: FAQItem[] = [
     category: 'Legal Services',
     question: "के तपाईं नि:शुल्क कानूनी सहायता प्रदान गर्नुहुन्छ?",
     answer: "हो। हामी आर्थिक रूपमा विपन्न र सामाजिक रूपमा सीमान्तकृत व्यक्तिहरूलाई प्रो बोनो (नि:शुल्क) कानूनी सहायता प्रदान गर्न प्रतिबद्ध छौं जसले कानूनी प्रतिनिधित्व वहन गर्न सक्दैनन्।"
+  },
+  {
+    id: 101,
+    category: 'Glossary',
+    question: "समन्यायिक (Samanyayik) भनेको के हो?",
+    answer: "<strong><dfn>समन्यायिक</dfn></strong> (Pronunciation: <em>Sah-mahn-yah-yik</em>) को अर्थ नेपालीमा 'समतामूलक न्याय' वा 'निष्पक्ष न्याय प्रदान गर्ने' हो। यसले सबैका लागि सामाजिक र आर्थिक न्याय सुनिश्चित गर्ने हाम्रो प्रतिबद्धतालाई जनाउँछ।"
+  },
+  {
+    id: 102,
+    category: 'Glossary',
+    question: "WACC भनेको के हो?",
+    answer: "<strong><dfn>WACC</dfn></strong> (Pronunciation: <em>Wack</em>) को अर्थ 'अदालतको सहयोगी समिति' (Amicus Curiae Committee) हो, जसले जटिल सार्वजनिक सरोकारका मुद्दाहरूमा अदालतलाई निष्पक्ष राय दिन्छ।"
+  },
+  {
+    id: 103,
+    category: 'Glossary',
+    question: "बण्डापत्र (Partition Deed) भनेको के हो?",
+    answer: "<strong><dfn>बण्डापत्र</dfn></strong> (Pronunciation: <em>Par-tish-uhn Deed</em>) भन्नाले अंशियारहरू बीच अंशियारको मञ्जुरीले पैतृक वा संयुक्त सम्पत्ति अंशबण्डा गर्दा तयार गरिने कानूनी कागजातलाई बुझाउँछ।"
+  },
+  {
+    id: 104,
+    category: 'Glossary',
+    question: "अदालती दस्तुरको स्ल्याब (Slabs) भनेको के हो?",
+    answer: "दस्तुर <strong><dfn>स्ल्याब</dfn></strong> (Pronunciation: <em>slabs</em>) भन्नाले मुद्दाको दाबी रकम अनुसार तोकिएको दरहरू हुन्। दाबी रकम बढ्दै जाँदा दस्तुरको दर क्रमशः घट्दै जान्छ।"
   }
 ];
 
@@ -1021,17 +1117,6 @@ export const TEAM_MEMBERS: TeamMember[] = [
     phoneNumber: "+977-9867757912",
     email: "lafasandip15@gmail.com"
   },
-  {
-    name: "Alaka Wagle",
-    position: "Research Assistant",
-    description:
-      "Alaka Wagle is a founding member and Research Assistant with a strong interest in human rights, social justice, and environmental justice. She actively participates in national seminars and civic movements, applying feminist legal theory to analyze policies from a gender perspective. She also has a strong professional interest in corporate sectors, particularly banking and insurance law.",
-    workingArea:
-      "Corporate Law, Business Management, Environmental Justice, Feminist Legal Theory, Legal Research, and Policy Drafting.",
-    image: "/assets/team/alaka_wagle.png",
-    phoneNumber: "+977-9865031557",
-    email: "alakawagle2@gmail.com"
-  }
 ];
 
 export const TEAM_MEMBERS_NP: TeamMember[] = [
@@ -1068,17 +1153,6 @@ export const TEAM_MEMBERS_NP: TeamMember[] = [
     phoneNumber: "+९७७-९८६७७५७९१२",
     email: "lafasandip15@gmail.com"
   },
-  {
-    name: "अलका वाग्ले",
-    position: "अनुसन्धान सहायक",
-    description:
-      "अलका वाग्ले एक संस्थापक सदस्य तथा अनुसन्धान सहायक हुन्। उनी मानव अधिकार, सामाजिक न्याय, र वातावरणीय न्यायका विषयमा विशेष रुचि राख्छिन्। उनले विभिन्न राष्ट्रिय सेमिनार, छलफल, र नागरिक आन्दोलनहरूमा सक्रिय सहभागिता जनाउँदै, नारीवादी कानुनी दृष्टिकोणबाट नीतिगत विषयहरूको विश्लेषण गर्छिन्। साथै, बैंकिङ र बीमा क्षेत्रप्रति उनको पेशागत रुचि उल्लेखनीय छ।",
-    workingArea:
-      "कर्पोरेट कानून, व्यवसाय प्रवन्धन, वातावरणीय न्याय, नारीवादी कानुनी सिद्धान्त, कानुनी अनुसन्धान, र नीतिनिर्माण",
-    image: "/assets/team/alaka_wagle.png",
-    phoneNumber: "+९७७-९८६५०३१५५७",
-    email: "alakawagle2@gmail.com"
-  }
 ];
 
 
@@ -1449,6 +1523,30 @@ export const FAQ_ITEMS = [
     category: 'Privacy & Ethics',
     question: "Who owns the final research reports?",
     answer: "Typically, the organization commissioning the research owns the final product, but we ensure the findings are used to advocate for your rights"
+  },
+  {
+    id: 101,
+    category: 'Glossary',
+    question: "What is Samanyayik?",
+    answer: "<strong><dfn>Samanyayik</dfn></strong> (Pronounced: <em>Sah-mahn-yah-yik</em>) means 'Equitable' or 'Providing fair justice' in Nepali. It represents our organization's commitment to social and economic justice for all."
+  },
+  {
+    id: 102,
+    category: 'Glossary',
+    question: "What is WACC?",
+    answer: "<strong><dfn>WACC</dfn></strong> (Pronounced: <em>Wack</em>) stands for Writ of Amicus Curiae Committee, which is a group of legal experts who provide advice to courts on complex public interest issues."
+  },
+  {
+    id: 103,
+    category: 'Glossary',
+    question: "What is a Partition Deed?",
+    answer: "A <strong><dfn>Partition Deed</dfn></strong> (Pronounced: <em>Par-tish-uhn Deed</em>) is a legal document used to divide a co-owned property among its legal owners (such as family members sharing ancestral land)."
+  },
+  {
+    id: 104,
+    category: 'Glossary',
+    question: "What are slabs in court fees?",
+    answer: "Court fee <strong><dfn>slabs</dfn></strong> (Pronounced: <em>slabs</em>) are the set ranges of claim amounts used to determine filing fees. The rate decreases as the claim amount moves to higher slabs."
   }
 ] as FAQItem[];
 

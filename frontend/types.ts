@@ -230,7 +230,8 @@ export type FAQCategory =
   | 'Research & Policy'
   | 'Accessibility'
   | 'Labor Law'
-  | 'Privacy & Ethics';
+  | 'Privacy & Ethics'
+  | 'Glossary';
 
 export interface FAQItem {
   id: number;

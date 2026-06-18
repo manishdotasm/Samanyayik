@@ -6,10 +6,12 @@ import React, { useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { SERVICE_CATEGORIES, SERVICE_CATEGORIES_NP, TRANSLATIONS } from '../constants';
 import { AppointmentCTA } from '../components/Shared/AppointmentCTA';
-import { ArrowRight } from 'lucide-react';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { useAccessibility } from '../contexts/AccessibilityContext';
+import { ArrowRight } from 'lucide-react';
 
 const PracticeAreasPage: React.FC = () => {
+  usePageTitle('Practice Areas');
   const { language } = useAccessibility();
   const t = TRANSLATIONS[language];
   const categories = language === 'np' ? SERVICE_CATEGORIES_NP : SERVICE_CATEGORIES;
@@ -29,7 +31,7 @@ const PracticeAreasPage: React.FC = () => {
   }, [location]);
 
   return (
-    <main id="main-content" tabIndex={-1} className="flex-grow bg-white min-h-screen">
+    <main id="main-content" lang={language === 'np' ? 'ne' : 'en'} tabIndex={0} className="flex-grow bg-white min-h-screen">
        {/* Header */}
       <div className="bg-gray-50 py-16 md:py-24 border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 text-center">
@@ -63,7 +65,7 @@ const PracticeAreasPage: React.FC = () => {
                         rel="noopener noreferrer"
                         key={service.id}
                         className="bg-white border-2 border-gray-100 rounded-xl p-8 hover:border-secondary hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col h-full group text-left"
-                        aria-label={`${t.viewDetails} for ${service.title}`}
+                        aria-label={`${t.viewDetails} for ${service.title} (opens in a new tab)`}
                     >
                         <h3 className="text-xl font-serif font-bold text-black mb-4 group-hover:text-secondary transition-colors">
                             {service.title}

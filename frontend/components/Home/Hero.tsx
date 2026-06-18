@@ -3,23 +3,28 @@
 
 import React from 'react';
 import { useAccessibility } from '../../contexts/AccessibilityContext';
-import { TRANSLATIONS } from '../../constants';
+import { TRANSLATIONS, SIMPLIFIED_TRANSLATIONS } from '../../constants';
 import { Button } from '../UI/Button';
 import { ArrowRight, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const Hero: React.FC = () => {
-  const { language } = useAccessibility();
+  const { language, simplifiedMode } = useAccessibility();
   const t = TRANSLATIONS[language];
+  const st = SIMPLIFIED_TRANSLATIONS[language];
+
+  const title = simplifiedMode && st.heroTitle ? st.heroTitle : t.heroTitle;
+  const subtitle = simplifiedMode && st.heroSubtitle ? st.heroSubtitle : t.heroSubtitle;
+  const context = simplifiedMode && st.heroContext ? st.heroContext : t.heroContext;
 
   // Helper to highlight words in green
   const renderTitle = () => {
     return (
       <h1 className="text-5xl md:text-7xl font-serif font-bold text-black leading-tight mb-6">
-        {language === 'en' ? (
+        {language === 'en' && !simplifiedMode ? (
           <>Injustice anywhere is a threat to justice <span className="text-secondary">everywhere</span>.</>
         ) : (
-          <>{t.heroTitle}</>
+          <>{title}</>
         )}
       </h1>
     );
@@ -28,40 +33,43 @@ export const Hero: React.FC = () => {
   return (
     <section className="relative bg-primary overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row min-h-[80vh]">
+         <div className="flex flex-col md:flex-row min-h-[80vh]">
           {/* Left Content */}
           <div className="w-full md:w-1/2 flex flex-col justify-center px-4 sm:px-8 py-12 md:py-20 lg:px-12 z-10">
             <span className="text-secondary font-bold tracking-wider uppercase mb-4 text-sm md:text-base border-l-4 border-secondary pl-4">
-              {t.heroContext}
+              {context}
             </span>
             
             {renderTitle()}
             
             <p className="text-lg md:text-xl text-black font-normal mb-10 max-w-lg leading-relaxed">
-              {t.heroSubtitle}
+              {subtitle}
             </p>
             
             <div className="flex flex-col gap-4 w-full max-w-lg">
-              <Link to="/booking" className="w-full">
-                <Button 
-                  className="w-full justify-center py-4 text-lg"
-                  onClick={() => document.getElementById('appointment')?.scrollIntoView({ behavior: 'smooth' })}
-                >
-                  {t.bookAppointmentNow}
-                </Button>
-              </Link>
+              <Button 
+                to="/booking"
+                className="w-full justify-center py-4 text-lg"
+                onClick={() => document.getElementById('appointment')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                {t.bookAppointmentNow}
+              </Button>
               
               <div className="flex gap-4 w-full">
-                <Link to="/calculator/legal-fee" className="flex-1">
-                  <Button variant="secondary" className="w-full justify-center px-2 text-sm md:text-base h-full">
-                      {t.legalFeeCalc}
-                  </Button>
-                </Link>
-                <Link to="/calculator/other" className="flex-1">
-                  <Button variant="secondary" className="w-full justify-center px-2 text-sm md:text-base h-full">
-                      {t.otherCalculators}
-                  </Button>
-                </Link>
+                <Button 
+                  to="/calculator/legal-fee"
+                  variant="secondary" 
+                  className="flex-1 justify-center px-2 text-sm md:text-base h-full"
+                >
+                  {t.legalFeeCalc}
+                </Button>
+                <Button 
+                  to="/calculator/other"
+                  variant="secondary" 
+                  className="flex-1 justify-center px-2 text-sm md:text-base h-full"
+                >
+                  {t.otherCalculators}
+                </Button>
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { Calendar, Clock, User, CheckCircle, Mic, MapPin, ChevronLeft, ChevronRi
 import { Button } from '../components/UI/Button';
 import { useAccessibility } from '../contexts/AccessibilityContext';
 import { TRANSLATIONS } from '../constants';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
  
 
@@ -33,6 +34,7 @@ const LocationMarker: React.FC<{ setPosition: (pos: [number, number]) => void }>
 };
 
 const BookingPage: React.FC = () => {
+  usePageTitle('Book Appointment');
   const { language, highContrast } = useAccessibility();
   const t = TRANSLATIONS[language];
   
@@ -299,7 +301,7 @@ const BookingPage: React.FC = () => {
   };
 
   return (
-    <main id="main-content" tabIndex={-1} className={`flex-grow min-h-screen py-16 px-4 ${highContrast ? 'bg-black' : 'bg-gray-50'}`}>
+    <main id="main-content" lang={language === 'np' ? 'ne' : 'en'} tabIndex={0} className={`flex-grow min-h-screen py-16 px-4 ${highContrast ? 'bg-black' : 'bg-gray-50'}`}>
       <div className="max-w-4xl mx-auto">
         <h1 className={`text-4xl font-serif font-bold text-center mb-4 ${highContrast ? 'text-yellow-400' : 'text-black'}`}>
           {t.bookTitle}
@@ -309,21 +311,21 @@ const BookingPage: React.FC = () => {
         </p>
 
         {/* Steps Indicator */}
-        <div className="flex justify-between items-center mb-12 relative max-w-2xl mx-auto">
+        <ol className="flex justify-between items-center mb-12 relative max-w-2xl mx-auto" aria-label="Booking progress">
           {/* Progress Line */}
           <div className={`absolute top-1/2 left-0 w-full h-1 -z-10 transform -translate-y-1/2 ${highContrast ? '!bg-yellow-400' : 'bg-gray-300'}`}></div>
           
           {[1, 2, 3].map((step) => (
-            <div key={step} className={`flex flex-col items-center px-2 ${highContrast ? '!bg-black' : 'bg-gray-50'}`}>
+            <li key={step} className={`flex flex-col items-center px-2 ${highContrast ? '!bg-black' : 'bg-gray-50'}`} aria-current={currentStep === step ? "step" : undefined}>
               <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold mb-2 transition-colors ${currentStep >= step ? activeStepClass : inactiveStepClass}`}>
                 {step}
               </div>
               <span className={`text-sm font-bold ${highContrast ? 'text-yellow-400' : 'text-gray-700'}`}>
                 {step === 1 ? t.stepDate : step === 2 ? t.stepTime : t.stepDetails}
               </span>
-            </div>
+            </li>
           ))}
-        </div>
+        </ol>
 
         {isSuccess ? (
            <div className={`text-center p-12 rounded-xl border-2 ${highContrast ? 'bg-black border-yellow-400 text-yellow-400' : 'bg-white border-green-100'}`}>
@@ -359,7 +361,7 @@ const BookingPage: React.FC = () => {
                         disabled={isPast || isSaturday}
                         onClick={() => handleDateSelect(day)}
                         className={`
-                          aspect-square rounded-lg flex items-center justify-center font-bold text-lg transition-all
+                          aspect-square rounded-lg flex items-center justify-center font-bold text-lg transition-all min-w-[44px] min-h-[44px]
                           ${isPast || isSaturday ? 'opacity-20 cursor-not-allowed' : 'hover:scale-105'}
                           ${isSelected 
                             ? (highContrast ? '!bg-yellow-400 !text-black' : 'bg-secondary text-white') 
@@ -445,167 +447,213 @@ const BookingPage: React.FC = () => {
             {/* Step 3: Form */}
             {currentStep === 3 && (
                <div className="p-8 md:p-12">
-                 <h2 className={`text-2xl font-serif font-bold mb-8 flex items-center gap-3 ${highContrast ? 'text-yellow-400' : 'text-black'}`}>
+                 <h2 className={`text-2xl font-serif font-bold mb-6 flex items-center gap-3 ${highContrast ? 'text-yellow-400' : 'text-black'}`}>
                   <User className="w-6 h-6" /> {t.personalDetails}
                 </h2>
-                
-                <p className={`text-sm mb-6 font-bold ${highContrast ? 'text-red-400' : 'text-red-600'}`}>{t.requiredFields}</p>
 
-                {/* Consultation Type Selection */}
-                <div className="mb-8 p-6 rounded-lg border-2 border-gray-200 bg-gray-50">
-                    <h3 className={`text-lg font-bold mb-4 ${highContrast ? 'text-black' : 'text-gray-900'}`}>Select Consultation Type:</h3>
-                    <div className="space-y-3">
-                        <label className="flex items-center justify-between p-4 bg-white rounded border border-gray-200 cursor-pointer hover:border-secondary transition-colors">
-                            <div className="flex items-center gap-3">
-                                <input 
-                                    type="radio" 
-                                    name="consultationType" 
-                                    value="online"
-                                    checked={form.consultationType === 'online'}
-                                    onChange={() => setForm({...form, consultationType: 'online'})}
-                                    className="w-5 h-5 text-secondary focus:ring-secondary"
-                                />
-                                <span className="font-bold text-gray-800">Online Virtual Consultation</span>
-                            </div>
-                            <span className="font-bold text-secondary">Rs. 2000</span>
-                        </label>
-
-                        <label className="flex items-center justify-between p-4 bg-white rounded border border-gray-200 cursor-pointer hover:border-secondary transition-colors">
-                            <div className="flex items-center gap-3">
-                                <input 
-                                    type="radio" 
-                                    name="consultationType" 
-                                    value="offline"
-                                    checked={form.consultationType === 'offline'}
-                                    onChange={() => setForm({...form, consultationType: 'offline'})}
-                                    className="w-5 h-5 text-secondary focus:ring-secondary"
-                                />
-                                <span className="font-bold text-gray-800">Offline Office Consultation</span>
-                            </div>
-                            <span className="font-bold text-secondary">Rs. 3500</span>
-                        </label>
-                    </div>
+                {/* Booking Summary */}
+                <div className={`mb-8 p-6 rounded-lg border-2 border-dashed ${highContrast ? 'bg-gray-900 border-yellow-400 text-white' : 'bg-green-50/50 border-secondary text-gray-800'}`}>
+                  <h3 className="text-lg font-serif font-bold mb-3">Booking Summary</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <p><strong>Date:</strong> {selectedDate?.toLocaleDateString()}</p>
+                    <p><strong>Time:</strong> {selectedTime}</p>
+                    <p><strong>Consultation Type:</strong> {form.consultationType === 'online' ? 'Online Virtual' : 'Offline Office'} (Rs. {form.consultationType === 'online' ? '2000' : '3500'})</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setCurrentStep(1)}
+                    className={`mt-4 text-sm font-bold underline hover:opacity-85 ${highContrast ? 'text-yellow-400' : 'text-secondary'}`}
+                  >
+                    Edit Date & Time
+                  </button>
                 </div>
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className={`block text-sm font-bold mb-2 ${highContrast ? 'text-yellow-400' : 'text-black'}`}>{t.fullName} *</label>
-                        <input 
-                          type="text" 
-                          value={form.name}
-                          onChange={e => setForm({...form, name: e.target.value})}
-                          className={getInputClass(!!errors.name)}
-                        />
-                        {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
-                      </div>
-                      <div>
-                        <label className={`block text-sm font-bold mb-2 ${highContrast ? 'text-yellow-400' : 'text-black'}`}>{t.phoneNumber} *</label>
-                        <input 
-                          type="text" 
-                          value={form.phone}
-                          onChange={e => setForm({...form, phone: e.target.value})}
-                          placeholder="9876543210"
-                          className={getInputClass(!!errors.phone)}
-                        />
-                         {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
-                      </div>
-                   </div>
-
-                   <div>
-                      <label className={`block text-sm font-bold mb-2 ${highContrast ? 'text-yellow-400' : 'text-black'}`}>{t.emailLabel}</label>
-                      <input 
-                        type="email" 
-                        placeholder="abc@example.com"
-                        value={form.email}
-                        onChange={e => setForm({...form, email: e.target.value})}
-                        className={getInputClass(!!errors.email)}
-                      />
-                      {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
-                   </div>
-
-                   {/* Address Selection */}
-                   <div>
-                      <div className="flex justify-between items-center mb-2">
-                        <label className={`block text-sm font-bold ${highContrast ? 'text-yellow-400' : 'text-black'}`}>{t.addressLabel}</label>
-                        <button 
-                          type="button" 
-                          onClick={() => setShowMap(!showMap)}
-                          className={`text-sm font-bold underline ${highContrast ? 'text-yellow-400' : 'text-secondary'}`}
-                        >
-                          {showMap ? "Switch to Text Input" : t.mapSelect}
-                        </button>
-                      </div>
-                      
-                      {showMap ? (
-                        <div className="h-64 w-full rounded-lg overflow-hidden border-2 border-gray-300 mb-2 relative z-0">
-                           <MapContainer center={[27.7172, 85.3240]} zoom={13} style={{ height: '100%', width: '100%' }}>
-                              <TileLayer
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                              />
-                              <LocationMarker setPosition={(pos) => setForm({...form, coordinates: pos, address: `Lat: ${pos[0].toFixed(4)}, Lng: ${pos[1].toFixed(4)}`})} />
-                           </MapContainer>
-                           <p className="text-xs text-gray-500 mt-1 text-center">Click on the map to set location</p>
-                        </div>
-                      ) : null}
-                      
-                      <input 
-                        type="text" 
-                        value={form.address}
-                        onChange={e => setForm({...form, address: e.target.value})}
-                        placeholder={showMap ? "Coordinates will appear here..." : "Enter full address"}
-                        className={getInputClass(false)}
-                      />
-                   </div>
-
-                   {/* Issue & Voice */}
-                   <div>
-                      <label className={`block text-sm font-bold mb-2 ${highContrast ? 'text-yellow-400' : 'text-black'}`}>
-                          {t.yourIssue} / {t.voiceMessage} <span className="text-red-500">*</span>
-                      </label>
-                      <textarea 
-                        value={form.issue}
-                        onChange={e => setForm({...form, issue: e.target.value})}
-                        rows={4}
-                        className={`${getInputClass(!!errors.issue)} mb-2`}
-                        placeholder="Enter your issue here..."
-                      ></textarea>
-                      
-                      <div className={`flex items-center gap-4 p-4 rounded border ${highContrast ? 'bg-gray-900 border-yellow-400' : 'bg-gray-50 border-gray-200'}`}>
-                         <div className="flex-grow">
-                            <p className={`text-sm font-bold mb-1 ${highContrast ? 'text-white' : 'text-black'}`}>{t.voiceMessage}</p>
-                            <p className={`text-xs ${highContrast ? 'text-gray-300' : 'text-gray-500'}`}>
-                                {hasVoiceMessage ? "Voice message recorded!" : t.voiceMessageHint}
-                            </p>
-                         </div>
-                         <button
-                           type="button"
-                           onClick={toggleRecording}
-                           className={`p-3 rounded-full transition-all ${isRecording ? 'bg-red-500 animate-pulse text-white' : (hasVoiceMessage ? 'bg-green-600 text-white' : 'bg-secondary text-white')}`}
-                           aria-label={isRecording ? "Stop recording" : (hasVoiceMessage ? "Re-record voice message" : "Record voice message")}
+                 
+                 <p className={`text-sm mb-6 font-bold ${highContrast ? 'text-red-400' : 'text-red-600'}`}>{t.requiredFields}</p>
+ 
+                 {/* Consultation Type Selection */}
+                 <fieldset className="mb-8 p-6 rounded-lg border-2 border-gray-200 bg-gray-50">
+                     <legend className={`text-lg font-bold px-2 ${highContrast ? 'text-black' : 'text-gray-900'}`}>Select Consultation Type:</legend>
+                     <div className="space-y-3 mt-3">
+                         <label className="flex items-center justify-between p-4 bg-white rounded border border-gray-200 cursor-pointer hover:border-secondary transition-colors">
+                             <div className="flex items-center gap-3">
+                                 <input 
+                                     type="radio" 
+                                     name="consultationType" 
+                                     value="online"
+                                     checked={form.consultationType === 'online'}
+                                     onChange={() => setForm({...form, consultationType: 'online'})}
+                                     className="w-5 h-5 text-secondary focus:ring-secondary"
+                                 />
+                                 <span className="font-bold text-gray-800">Online Virtual Consultation</span>
+                             </div>
+                             <span className="font-bold text-secondary">Rs. 2000</span>
+                         </label>
+ 
+                         <label className="flex items-center justify-between p-4 bg-white rounded border border-gray-200 cursor-pointer hover:border-secondary transition-colors">
+                             <div className="flex items-center gap-3">
+                                 <input 
+                                     type="radio" 
+                                     name="consultationType" 
+                                     value="offline"
+                                     checked={form.consultationType === 'offline'}
+                                     onChange={() => setForm({...form, consultationType: 'offline'})}
+                                     className="w-5 h-5 text-secondary focus:ring-secondary"
+                                 />
+                                 <span className="font-bold text-gray-800">Offline Office Consultation</span>
+                             </div>
+                             <span className="font-bold text-secondary">Rs. 3500</span>
+                         </label>
+                     </div>
+                 </fieldset>
+ 
+                 <form onSubmit={handleSubmit} className="space-y-6" aria-label="Appointment Booking Form">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       <div>
+                         <label htmlFor="booking-name" className={`block text-sm font-bold mb-2 ${highContrast ? 'text-yellow-400' : 'text-black'}`}>{t.fullName} *</label>
+                         <input 
+                           id="booking-name"
+                           type="text" 
+                           value={form.name}
+                           autoComplete="name"
+                           aria-describedby={errors.name ? "error-booking-name" : undefined}
+                           onChange={e => setForm({...form, name: e.target.value})}
+                           className={getInputClass(!!errors.name)}
+                         />
+                         {errors.name && (
+                           <p id="error-booking-name" role="alert" className="text-red-500 text-xs mt-1 flex items-center gap-1 font-bold">
+                             <AlertCircle className="w-3.5 h-3.5" /> <span>Error: {errors.name}</span>
+                           </p>
+                         )}
+                       </div>
+                       <div>
+                         <label htmlFor="booking-phone" className={`block text-sm font-bold mb-2 ${highContrast ? 'text-yellow-400' : 'text-black'}`}>{t.phoneNumber} * <span className="text-xs font-normal text-gray-500">(exactly 10 digits, e.g. 9861292120)</span></label>
+                         <input 
+                           id="booking-phone"
+                           type="text" 
+                           value={form.phone}
+                           autoComplete="tel"
+                           aria-describedby={errors.phone ? "error-booking-phone" : undefined}
+                           onChange={e => setForm({...form, phone: e.target.value})}
+                           placeholder="9861292120"
+                           className={getInputClass(!!errors.phone)}
+                         />
+                         {errors.phone && (
+                           <p id="error-booking-phone" role="alert" className="text-red-500 text-xs mt-1 flex items-center gap-1 font-bold">
+                             <AlertCircle className="w-3.5 h-3.5" /> <span>Error: {errors.phone}</span>
+                           </p>
+                         )}
+                       </div>
+                    </div>
+ 
+                    <div>
+                       <label htmlFor="booking-email" className={`block text-sm font-bold mb-2 ${highContrast ? 'text-yellow-400' : 'text-black'}`}>{t.emailLabel}</label>
+                       <input 
+                         id="booking-email"
+                         type="email" 
+                         placeholder="abc@example.com"
+                         autoComplete="email"
+                         aria-describedby={errors.email ? "error-booking-email" : undefined}
+                         value={form.email}
+                         onChange={e => setForm({...form, email: e.target.value})}
+                         className={getInputClass(!!errors.email)}
+                       />
+                       {errors.email && (
+                         <p id="error-booking-email" role="alert" className="text-red-500 text-xs mt-1 flex items-center gap-1 font-bold">
+                           <AlertCircle className="w-3.5 h-3.5" /> <span>Error: {errors.email}</span>
+                         </p>
+                       )}
+                    </div>
+ 
+                    {/* Address Selection */}
+                    <div>
+                       <div className="flex justify-between items-center mb-2">
+                         <label htmlFor="booking-address" className={`block text-sm font-bold ${highContrast ? 'text-yellow-400' : 'text-black'}`}>{t.addressLabel}</label>
+                         <button 
+                           type="button" 
+                           onClick={() => setShowMap(!showMap)}
+                           className={`text-sm font-bold underline ${highContrast ? 'text-yellow-400' : 'text-secondary'}`}
                          >
-                           {hasVoiceMessage && !isRecording ? <CheckCircle className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                           {showMap ? "Switch to Text Input" : t.mapSelect}
                          </button>
-                         {isRecording && <span className="text-red-500 font-bold text-sm animate-pulse">{t.recording}</span>}
-                      </div>
-                      {errors.issue && <p className="text-red-500 text-xs mt-1 font-bold">{errors.issue}</p>}
-                   </div>
-
-                   <div className="flex justify-between pt-6">
-                      <Button variant="secondary" onClick={() => setCurrentStep(2)} type="button" className="px-8">
-                          <ChevronLeft className="mr-2 w-4 h-4" /> {t.prevStep}
-                      </Button>
-                      <Button 
-                        type="submit" 
-                        disabled={!captchaToken}
-                        className={`px-8 ${!captchaToken ? 'opacity-50 cursor-not-allowed bg-gray-400' : 'bg-secondary hover:bg-green-800'} text-white`}
-                      >
-                          {t.submitBooking}
-                      </Button>
-                   </div>
-                </form>
-               </div>
+                       </div>
+                       
+                       {showMap ? (
+                         <div className="h-64 w-full rounded-lg overflow-hidden border-2 border-gray-300 mb-2 relative z-0">
+                            <MapContainer center={[27.7172, 85.3240]} zoom={13} style={{ height: '100%', width: '100%' }}>
+                               <TileLayer
+                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                               />
+                               <LocationMarker setPosition={(pos) => setForm({...form, coordinates: pos, address: `Lat: ${pos[0].toFixed(4)}, Lng: ${pos[1].toFixed(4)}`})} />
+                            </MapContainer>
+                            <p className="text-xs text-gray-500 mt-1 text-center">Click on the map to set location</p>
+                         </div>
+                       ) : null}
+                       
+                       <input 
+                         id="booking-address"
+                         type="text" 
+                         value={form.address}
+                         autoComplete="street-address"
+                         onChange={e => setForm({...form, address: e.target.value})}
+                         placeholder={showMap ? "Coordinates will appear here..." : "Enter full address"}
+                         className={getInputClass(false)}
+                       />
+                    </div>
+ 
+                    {/* Issue & Voice */}
+                    <div>
+                       <label htmlFor="booking-issue" className={`block text-sm font-bold mb-2 ${highContrast ? 'text-yellow-400' : 'text-black'}`}>
+                           {t.yourIssue} / {t.voiceMessage} <span className="text-red-500">*</span>
+                       </label>
+                       <textarea 
+                         id="booking-issue"
+                         value={form.issue}
+                         aria-describedby={errors.issue ? "error-booking-issue" : undefined}
+                         onChange={e => setForm({...form, issue: e.target.value})}
+                         rows={4}
+                         className={`${getInputClass(!!errors.issue)} mb-2`}
+                         placeholder="Enter your issue here..."
+                       ></textarea>
+                       
+                       <div className={`flex items-center gap-4 p-4 rounded border ${highContrast ? 'bg-gray-900 border-yellow-400' : 'bg-gray-50 border-gray-200'}`}>
+                          <div className="flex-grow">
+                             <p className={`text-sm font-bold mb-1 ${highContrast ? 'text-white' : 'text-black'}`}>{t.voiceMessage}</p>
+                             <p className={`text-xs ${highContrast ? 'text-gray-300' : 'text-gray-500'}`}>
+                                 {hasVoiceMessage ? "Voice message recorded!" : t.voiceMessageHint}
+                             </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={toggleRecording}
+                            className={`p-3 rounded-full transition-all ${isRecording ? 'bg-red-500 animate-pulse text-white' : (hasVoiceMessage ? 'bg-green-600 text-white' : 'bg-secondary text-white')}`}
+                            aria-label={isRecording ? "Stop recording" : (hasVoiceMessage ? "Re-record voice message" : "Record voice message")}
+                          >
+                            {hasVoiceMessage && !isRecording ? <CheckCircle className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                          </button>
+                          {isRecording && <span className="text-red-500 font-bold text-sm animate-pulse">{t.recording}</span>}
+                       </div>
+                       {errors.issue && (
+                         <p id="error-booking-issue" role="alert" className="text-red-500 text-xs mt-1 font-bold flex items-center gap-1">
+                           <AlertCircle className="w-3.5 h-3.5" /> <span>Error: {errors.issue}</span>
+                         </p>
+                       )}
+                    </div>
+ 
+                    <div className="flex justify-between pt-6">
+                       <Button variant="secondary" onClick={() => setCurrentStep(2)} type="button" className="px-8">
+                           <ChevronLeft className="mr-2 w-4 h-4" /> {t.prevStep}
+                       </Button>
+                       <Button 
+                         type="submit" 
+                         disabled={!captchaToken}
+                         className={`px-8 ${!captchaToken ? 'opacity-50 cursor-not-allowed bg-gray-400' : 'bg-secondary hover:bg-green-800'} text-white`}
+                       >
+                           {t.submitBooking}
+                       </Button>
+                    </div>
+                 </form>
+                </div>
             )}
           </div>
         )}

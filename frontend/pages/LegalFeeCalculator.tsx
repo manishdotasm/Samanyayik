@@ -13,6 +13,7 @@ import {
 import { AppointmentCTA } from '../components/Shared/AppointmentCTA';
 import { useAccessibility } from '../contexts/AccessibilityContext';
 import { TRANSLATIONS } from '../constants';
+import { usePageTitle } from '../hooks/usePageTitle';
 
 // --- Types ---
 
@@ -35,8 +36,8 @@ interface CalculationResult {
 const numberToWords = (num: number): string => {
   if (num === 0) return "Zero";
 
-  const a = ['','One ','Two ','Three ','Four ','Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
-  const b = ['', '', 'Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+  const a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+  const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
 
   const getLT20 = (n: number) => a[n];
   const get20Plus = (n: number) => b[Math.floor(n / 10)] + (n % 10 !== 0 ? ' ' + a[n % 10] : '');
@@ -49,16 +50,16 @@ const numberToWords = (num: number): string => {
     if (n < 10000000) return numToWordsRecursive(Math.floor(n / 100000)) + "Lakh " + (n % 100000 !== 0 ? numToWordsRecursive(n % 100000) : "");
     return numToWordsRecursive(Math.floor(n / 10000000)) + "Crore " + (n % 10000000 !== 0 ? numToWordsRecursive(n % 10000000) : "");
   };
-  
+
   const integerPart = Math.floor(num);
   const decimalPart = Math.round((num - integerPart) * 100);
-  
+
   let result = numToWordsRecursive(integerPart).trim();
-  
+
   if (decimalPart > 0) {
     result += ` and ${numToWordsRecursive(decimalPart).trim()} Paisa`;
   }
-  
+
   return result + " Only";
 };
 
@@ -74,7 +75,7 @@ const calculateFee = (amount: number): CalculationResult => {
     const limit = 25000;
     const currentAmount = Math.min(remaining, limit);
     const fee = 500;
-    
+
     tiers.push({
       id: 'tier-1',
       label: 'Up to 25,000',
@@ -83,7 +84,7 @@ const calculateFee = (amount: number): CalculationResult => {
       amountInTier: currentAmount,
       feeCalculated: fee
     });
-    
+
     totalFee += fee;
     remaining = Math.max(0, remaining - limit);
   }
@@ -221,7 +222,7 @@ You are Nyaya (न्याय), a narrow-scope AI for Samanyayik Legal Service 
 
 ALLOWED TOPICS (ONLY):
 1) Court Fee calculations strictly per Chapter 6 (Sections 63-84) below.
-2) Company info: Managing Director Advocate Jiwan Kumar Acharya; Advocates: Jiwan Kumar Acharya, Susma Dhakal; Research Assistants: Alaka Wagle, Sandip Thapa.
+2) Company info: Managing Director Advocate Jiwan Kumar Acharya; Advocates: Jiwan Kumar Acharya, Susma Dhakal; Research Assistants:  Sandip Thapa.
 3) Explaining Sections 63-84 text below.
 
 FORBIDDEN (must refuse):
@@ -267,7 +268,8 @@ ${LEGAL_CONTEXT}
 const LegalFeeCalculator: React.FC = () => {
   const { language } = useAccessibility();
   const t = TRANSLATIONS[language];
-  
+  usePageTitle('Legal Fee Calculator');
+
   const [amountStr, setAmountStr] = useState<string>('');
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -302,9 +304,9 @@ const LegalFeeCalculator: React.FC = () => {
 
     setIsLoadingAI(true);
     setAiResponse(null);
-    
+
     const response = await callGeminiAPI(aiPrompt);
-    
+
     setAiResponse(response);
     setIsLoadingAI(false);
   };
@@ -322,33 +324,33 @@ const LegalFeeCalculator: React.FC = () => {
   }, [result]);
 
   return (
-    <main id="main-content" tabIndex={-1} className="flex-grow min-h-[250vh] bg-white text-black font-sans flex flex-col relative">
+    <main id="main-content" lang={language === 'np' ? 'ne' : 'en'} tabIndex={0} className="flex-grow min-h-[250vh] bg-white text-black font-sans flex flex-col relative">
       {/* Header */}
       <div className="bg-white py-16 md:py-24 border-b border-gray-200 flex-shrink-0">
         <div className="max-w-4xl mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-black mb-6">{t.calcTitle}</h1>
-            <p className="text-xl text-black font-sans font-normal max-w-2xl mx-auto">
-              {t.calcSubtitle}
-            </p>
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-black mb-6">{t.calcTitle}</h1>
+          <p className="text-xl text-black font-sans font-normal max-w-2xl mx-auto">
+            {t.calcSubtitle}
+          </p>
         </div>
       </div>
 
       {/* Content Wrapper */}
       <div className="flex-grow flex flex-col items-center justify-start p-4 md:p-12 gap-8 w-full z-0">
         <div className="w-full max-w-lg space-y-12 mb-64">
-        
+
           {/* Calculator Card */}
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden border-2 border-gray-100">
             <div className="bg-secondary p-8 text-white text-center">
-              <h1 className="text-2xl font-serif font-bold flex justify-center items-center gap-3">
+              <h2 className="text-2xl font-serif font-bold flex justify-center items-center gap-3">
                 <CalculatorIcon className="w-6 h-6" />
                 {t.calcTitle}
-              </h1>
+              </h2>
               <p className="text-green-100 text-sm mt-2 font-sans font-bold opacity-90">Nepal | National Civil Procedure Code</p>
             </div>
 
             <div className="p-8 space-y-8">
-              <form onSubmit={handleCalculate} className="space-y-6">
+              <form onSubmit={handleCalculate} className="space-y-6" aria-label="Legal Fee Calculator Form">
                 <div>
                   <label htmlFor="claimAmount" className="block text-sm font-sans font-bold text-black mb-3">
                     {t.claimAmount}
@@ -362,14 +364,15 @@ const LegalFeeCalculator: React.FC = () => {
                       onChange={(e) => setAmountStr(e.target.value)}
                       placeholder={language === 'np' ? "रकम प्रविष्ट गर्नुहोस्..." : "Enter amount..."}
                       className="w-full px-4 py-3 text-lg bg-white border-2 border-gray-300 rounded-lg focus:border-secondary focus:ring-0 transition-all outline-none text-black shadow-sm font-sans"
+                      aria-describedby={error ? "error-claimAmount" : undefined}
                     />
                   </div>
                 </div>
 
                 {error && (
-                  <div className="flex items-center gap-2 text-red-600 bg-red-50 border border-red-200 p-4 rounded-lg text-sm font-sans font-bold">
+                  <div id="error-claimAmount" role="alert" className="flex items-center gap-2 text-red-600 bg-red-50 border border-red-200 p-4 rounded-lg text-sm font-sans font-bold">
                     <AlertCircle className="w-5 h-5" />
-                    {error}
+                    <span>Error: {error}</span>
                   </div>
                 )}
 
@@ -381,7 +384,7 @@ const LegalFeeCalculator: React.FC = () => {
                     {t.calculateBtn}
                     <ChevronRight className="w-5 h-5" />
                   </button>
-                  
+
                   {result && (
                     <button
                       type="button"
@@ -398,7 +401,7 @@ const LegalFeeCalculator: React.FC = () => {
               {result && (
                 <div ref={resultRef} className="space-y-8 animate-fade-in-up">
                   <div className="border-t border-gray-100 pt-8">
-                    <div className="bg-green-50 border-2 border-green-100 rounded-xl p-6 text-center">
+                    <div className="bg-green-50 border-2 border-green-100 rounded-xl p-6 text-center" aria-live="polite">
                       <span className="text-secondary text-sm font-sans font-bold uppercase tracking-wide">{t.totalFeePayable}</span>
                       <div className="text-4xl font-serif font-bold text-black mt-2 mb-3">
                         {formatCurrency(result.totalFee)}
@@ -414,22 +417,23 @@ const LegalFeeCalculator: React.FC = () => {
                     <h3 className="text-black text-sm font-sans font-bold uppercase tracking-wider mb-4 px-1">
                       {t.calculationDetails}
                     </h3>
-                    
+
                     <div className="bg-white border-2 border-gray-200 rounded-xl overflow-hidden">
                       <table className="w-full text-sm">
+                        <caption className="sr-only">Slab range calculations showing claim amount tiers, percentage rates, and calculated fees.</caption>
                         <thead className="bg-gray-50 text-black border-b border-gray-200">
                           <tr>
-                            <th className="px-4 py-4 text-left font-sans font-bold w-1/2">{t.slabRange}</th>
-                            <th className="px-4 py-4 text-center font-sans font-bold">{t.rate}</th>
-                            <th className="px-4 py-4 text-right font-sans font-bold">{t.fee}</th>
+                            <th scope="col" className="px-4 py-4 text-left font-sans font-bold w-1/2">{t.slabRange}</th>
+                            <th scope="col" className="px-4 py-4 text-center font-sans font-bold">{t.rate}</th>
+                            <th scope="col" className="px-4 py-4 text-right font-sans font-bold">{t.fee}</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                           {result.tiers.map((tier) => (
                             <tr key={tier.id}>
-                              <td className="px-4 py-4 text-black font-sans font-normal text-xs sm:text-sm">
+                              <th scope="row" className="px-4 py-4 text-left text-black font-sans font-normal text-xs sm:text-sm">
                                 {tier.label}
-                              </td>
+                              </th>
                               <td className="px-4 py-4 text-center">
                                 {tier.isFlat ? (
                                   <span className="bg-gray-100 text-black border border-gray-300 px-2 py-1 rounded text-xs font-sans font-bold">Fixed</span>
@@ -446,7 +450,7 @@ const LegalFeeCalculator: React.FC = () => {
                         {/* Total Footer Row */}
                         <tfoot className="bg-gray-100 font-bold border-t-2 border-gray-200 text-black">
                           <tr>
-                            <td colSpan={2} className="px-4 py-4 text-right font-sans">{t.total}</td>
+                            <th scope="row" colSpan={2} className="px-4 py-4 text-right font-sans">{t.total}</th>
                             <td className="px-4 py-4 text-right text-base text-secondary font-sans">
                               {formatCurrency(result.totalFee)}
                             </td>
@@ -466,9 +470,9 @@ const LegalFeeCalculator: React.FC = () => {
               <Sparkles className="w-5 h-5 text-secondary" />
               <h2 className="font-serif font-bold text-lg">{t.aiAssistant}</h2>
             </div>
-            
+
             <div className="p-6 bg-white">
-              <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 min-h-[80px] mb-4 shadow-inner">
+              <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 min-h-[80px] mb-4 shadow-inner" aria-live="polite">
                 {aiResponse ? (
                   <div className="prose prose-sm text-black font-sans font-normal text-sm">
                     <p>{aiResponse}</p>
@@ -481,7 +485,7 @@ const LegalFeeCalculator: React.FC = () => {
                 )}
               </div>
 
-              <form onSubmit={handleAskAI} className="relative">
+              <form onSubmit={handleAskAI} className="relative" aria-label="AI Legal Assistant Query Form">
                 <input
                   type="text"
                   value={aiPrompt}
@@ -489,6 +493,7 @@ const LegalFeeCalculator: React.FC = () => {
                   placeholder={t.askAiPlaceholder}
                   className="w-full pl-4 pr-12 py-3 rounded-lg border-2 border-gray-300 bg-white focus:border-secondary focus:ring-0 outline-none text-sm font-sans font-normal text-black shadow-sm"
                   disabled={isLoadingAI}
+                  aria-label={language === 'np' ? "अदालत शुल्क एआई सहायकलाई सोध्नुहोस्" : "Ask AI Legal Assistant about court fees"}
                 />
                 <button
                   type="submit"
@@ -501,13 +506,13 @@ const LegalFeeCalculator: React.FC = () => {
               </form>
             </div>
           </div>
-          
+
           {/* Dynamic Disclaimer Section */}
           {(result || aiResponse) && (
             <div className="flex gap-3 bg-amber-50 border border-amber-200 p-4 rounded-xl text-amber-900 text-xs md:text-sm">
               <AlertTriangle className="w-5 h-5 flex-shrink-0 text-amber-600" aria-hidden="true" />
               <div className="space-y-4 w-full">
-                
+
                 {result && (
                   <div>
                     <div className="font-bold mb-1">Calculator Disclaimer</div>
@@ -528,10 +533,10 @@ const LegalFeeCalculator: React.FC = () => {
               </div>
             </div>
           )}
-        
+
         </div>
       </div>
-      
+
       {/* Spacer */}
       <div className="h-96"></div>
 

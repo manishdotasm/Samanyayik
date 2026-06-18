@@ -2,13 +2,15 @@
 
 
 import React from 'react';
-import { ABOUT_CONTENT, ABOUT_CONTENT_NP, TRANSLATIONS } from '../../constants';
+import { ABOUT_CONTENT, ABOUT_CONTENT_NP, SIMPLIFIED_ABOUT_CONTENT, SIMPLIFIED_ABOUT_CONTENT_NP, TRANSLATIONS } from '../../constants';
 import { Target, Users, HeartHandshake } from 'lucide-react';
 import { useAccessibility } from '../../contexts/AccessibilityContext';
 
 export const Mission: React.FC = () => {
-  const { language } = useAccessibility();
-  const content = language === 'np' ? ABOUT_CONTENT_NP : ABOUT_CONTENT;
+  const { language, simplifiedMode } = useAccessibility();
+  const content = simplifiedMode
+    ? (language === 'np' ? SIMPLIFIED_ABOUT_CONTENT_NP : SIMPLIFIED_ABOUT_CONTENT)
+    : (language === 'np' ? ABOUT_CONTENT_NP : ABOUT_CONTENT);
   
   return (
     <section className="py-24 px-4 bg-white border-t border-gray-100">

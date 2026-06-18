@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Phone, Mail } from 'lucide-react';
 import { useAccessibility } from '../contexts/AccessibilityContext';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { TeamMember } from '../types';
 import { TRANSLATIONS, TEAM_MEMBERS, TEAM_MEMBERS_NP } from '../constants';
 import { Button } from '../components/UI/Button';
@@ -16,6 +17,8 @@ const TeamDetailPage: React.FC = () => {
     const memberIndex = parseInt(id || '0', 10);
     const members = language === 'np' ? TEAM_MEMBERS_NP : TEAM_MEMBERS;
     const member = members[memberIndex];
+
+    usePageTitle(member ? member.name : 'Team Member');
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -33,7 +36,7 @@ const TeamDetailPage: React.FC = () => {
     }
 
   return (
-    <main id="main-content" tabIndex={-1} className="flex-grow bg-white min-h-screen pt-24 md:pt-32 pb-16">
+    <main id="main-content" lang={language === 'np' ? 'ne' : 'en'} tabIndex={0} className="flex-grow bg-white min-h-screen pt-24 md:pt-32 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Back Button */}
@@ -50,7 +53,7 @@ const TeamDetailPage: React.FC = () => {
                  <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-gray-50 aspect-[3/4]">
                     <img 
                         src={member.image} 
-                        alt={member.name} 
+                        alt={`Portrait photo of ${member.name}`} 
                         className="w-full h-full object-cover"
                     />
                  </div>
@@ -60,7 +63,7 @@ const TeamDetailPage: React.FC = () => {
             <div className="w-full md:w-2/3 space-y-8">
                 <div>
                      <h1 className="text-4xl md:text-5xl font-serif font-bold text-black mb-2">{member.name}</h1>
-                     <p className="text-xl md:text-2xl text-secondary font-bold uppercase tracking-wide">{member.position}</p>
+                     <h2 className="text-xl md:text-2xl text-secondary font-bold uppercase tracking-wide">{member.position}</h2>
                 </div>
 
                 <div className="prose prose-lg text-black font-sans font-normal leading-relaxed text-justify max-w-none">

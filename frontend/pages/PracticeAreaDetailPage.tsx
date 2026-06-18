@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { SERVICE_CATEGORIES, SERVICE_CATEGORIES_NP, TRANSLATIONS } from '../constants';
 import { useAccessibility } from '../contexts/AccessibilityContext';
+import { usePageTitle } from '../hooks/usePageTitle';
 import { CheckCircle2 } from 'lucide-react';
 
 const PracticeAreaDetailPage: React.FC = () => {
@@ -21,6 +22,8 @@ const PracticeAreaDetailPage: React.FC = () => {
         }
     }
 
+    usePageTitle(foundService ? foundService.title : 'Practice Area');
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [serviceId]);
@@ -35,12 +38,12 @@ const PracticeAreaDetailPage: React.FC = () => {
 
     // Matching Modal Content Structure from PracticeAreasPage.tsx
     return (
-         <main id="main-content" tabIndex={-1} className="flex-grow bg-white min-h-screen py-12 px-4 md:px-8">
+         <main id="main-content" lang={language === 'np' ? 'ne' : 'en'} tabIndex={0} className="flex-grow bg-white min-h-screen py-12 px-4 md:px-8">
              <div className="max-w-4xl mx-auto">
                 <div className="prose max-w-none text-black font-sans">
-                    <h2 className="text-3xl md:text-4xl font-serif font-bold text-black mb-6 leading-tight">
+                    <h1 className="text-3xl md:text-4xl font-serif font-bold text-black mb-6 leading-tight">
                         {foundService.title}
-                    </h2>
+                    </h1>
 
                     <div className="flex items-center gap-2 mb-8 text-secondary font-bold text-sm uppercase tracking-wide border-b border-gray-100 pb-4">
                         <CheckCircle2 className="w-5 h-5" />

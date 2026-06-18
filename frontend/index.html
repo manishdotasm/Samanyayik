@@ -47,6 +47,21 @@
     }
   </script>
   <style>
+    @font-face {
+      font-family: 'Atkinson Hyperlegible';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('/assets/fonts/Atkinson-Hyperlegible-Regular.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Atkinson Hyperlegible';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url('/assets/fonts/Atkinson-Hyperlegible-Bold.ttf') format('truetype');
+    }
+
     body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
@@ -60,29 +75,70 @@
       font-family: "Playfair Display", serif;
     }
 
-    /* High Contrast Mode Overrides */
-    .high-contrast {
-      background-color: #000000 !important;
-      color: #ffff00 !important;
-    }
-
-    .high-contrast * {
+    /* High Contrast Dark Mode (Yellow on Black) */
+    .contrast-dark, .contrast-dark * {
       background-color: #000000 !important;
       color: #ffff00 !important;
       border-color: #ffff00 !important;
+      background-image: none !important;
     }
 
-    .high-contrast img {
-      filter: grayscale(100%) contrast(150%);
+    .contrast-dark img {
+      filter: grayscale(100%) contrast(150%) !important;
     }
 
-    .high-contrast button {
+    .contrast-dark button, .contrast-dark a {
       border: 2px solid #ffff00 !important;
+    }
+
+    /* High Contrast Light Mode (Black on White) */
+    .contrast-light, .contrast-light * {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border-color: #000000 !important;
+      background-image: none !important;
+    }
+
+    .contrast-light img {
+      filter: grayscale(100%) contrast(150%) !important;
+    }
+
+    .contrast-light button, .contrast-light a {
+      border: 2px solid #000000 !important;
+    }
+
+    /* Warm Pastel Theme (Sepia) */
+    .theme-sepia, .theme-sepia * {
+      background-color: #fbf0d9 !important;
+      color: #433422 !important;
+      border-color: #e4d3b2 !important;
+      background-image: none !important;
+    }
+
+    /* Grayscale Filter */
+    .grayscale-active {
+      filter: grayscale(100%) !important;
+    }
+
+    /* Global Color Invert */
+    .invert-active {
+      filter: invert(100%) !important;
+    }
+
+    /* Custom Text Color Overrides */
+    .text-override-green, .text-override-green * {
+      color: #22c55e !important;
+    }
+    .text-override-blue, .text-override-blue * {
+      color: #3b82f6 !important;
+    }
+    .text-override-yellow, .text-override-yellow * {
+      color: #eab308 !important;
     }
 
     /* Dyslexic Font */
     .dyslexic-font * {
-      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif !important;
+      font-family: 'Atkinson Hyperlegible', 'Comic Sans MS', sans-serif !important;
       letter-spacing: 0.05em;
     }
 
@@ -97,21 +153,157 @@
       font-weight: bold !important;
     }
 
+    /* Line Height Overrides */
+    .line-height-1-5, .line-height-1-5 * {
+      line-height: 1.5 !important;
+    }
+    .line-height-2-0, .line-height-2-0 * {
+      line-height: 2.0 !important;
+    }
+
+    /* Word Spacing Adjuster */
+    .word-spacing-expanded, .word-spacing-expanded * {
+      word-spacing: 0.16em !important;
+    }
+
+    /* Character Spacing Adjuster */
+    .char-spacing-expanded, .char-spacing-expanded * {
+      letter-spacing: 0.12em !important;
+    }
+
+    /* Custom Text Alignment Force */
+    .force-align-left, .force-align-left * {
+      text-align: left !important;
+    }
+    .force-align-right, .force-align-right * {
+      text-align: right !important;
+    }
+    .force-align-center, .force-align-center * {
+      text-align: center !important;
+    }
+    .force-align-justify, .force-align-justify * {
+      text-align: justify !important;
+    }
+
+    /* Visual Link Highlighter */
+    .highlight-links-active a, 
+    .highlight-links-active button {
+      outline: 4px solid #f59e0b !important;
+      background-color: #fef3c7 !important;
+      color: #000000 !important;
+    }
+
+    /* Large Focus Outline Force */
+    .force-focus-outline-active a,
+    .force-focus-outline-active button,
+    .force-focus-outline-active input,
+    .force-focus-outline-active textarea,
+    .force-focus-outline-active select {
+      outline: 3px dashed #166534 !important;
+      outline-offset: 2px !important;
+    }
+
+    /* Oversized High-Contrast Cursor */
+    .oversized-cursor-active, .oversized-cursor-active * {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M0 0 L0 32 L12 24 L24 40 L28 38 L16 22 L32 20 Z' fill='black' stroke='white' stroke-width='3'/%3E%3C/svg%3E"), auto !important;
+    }
+
+    /* Clean Minimalist Mode */
+    .minimalist-mode-active img:not(.accessibility-exclude):not(.accessibility-exclude *), 
+    .minimalist-mode-active svg:not([role="img"]):not(.accessibility-exclude):not(.accessibility-exclude *),
+    .minimalist-mode-active .bg-image:not(.accessibility-exclude):not(.accessibility-exclude *),
+    .minimalist-mode-active iframe:not(.accessibility-exclude):not(.accessibility-exclude *),
+    .minimalist-mode-active [class*="shadow"]:not(.accessibility-exclude):not(.accessibility-exclude *),
+    .minimalist-mode-active [class*="gradient"]:not(.accessibility-exclude):not(.accessibility-exclude *) {
+      display: none !important;
+    }
+
+    .minimalist-mode-active *:not(.accessibility-exclude):not(.accessibility-exclude *) {
+      background-image: none !important;
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+
+    /* Reduced Motion Preferences */
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-delay: -1ms !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        background-attachment: initial !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
+      }
+    }
+
+    .reduce-motion *, .reduce-motion ::before, .reduce-motion ::after {
+      animation-delay: -1ms !important;
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      background-attachment: initial !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
+
+    /* Color-Blindness Filters */
+    .color-blind-protanopia {
+      filter: url(#protanopia-adjust) !important;
+    }
+    .color-blind-deuteranopia {
+      filter: url(#deuteranopia-adjust) !important;
+    }
+    .color-blind-tritanopia {
+      filter: url(#tritanopia-adjust) !important;
+    }
+    .color-blind-achromatopsia {
+      filter: url(#achromatopsia-adjust) !important;
+    }
+
     /* Skip Link */
     .skip-link {
       position: absolute;
       top: -100px;
       left: 0;
       background: #166534;
-      /* secondary */
       color: white;
-      padding: 8px;
-      z-index: 100;
-      transition: top 0.2s;
+      padding: 8px 16px;
+      z-index: 1000;
+      transition: top 0.2s ease;
+      border-radius: 4px;
+      font-weight: bold;
     }
 
     .skip-link:focus {
       top: 0;
+      outline: 4px solid #f59e0b;
+      outline-offset: 2px;
+    }
+
+    /* Enhanced Focus Visibility */
+    *:focus {
+      outline: 3px solid #166534;
+      outline-offset: 2px;
+    }
+
+    *:focus:not(:focus-visible) {
+      outline: none;
+    }
+
+    *:focus-visible {
+      outline: 3px solid #166534;
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    /* High Contrast Focus Styles */
+    .contrast-dark *:focus-visible,
+    .contrast-light *:focus-visible {
+      outline: 3px dashed #ffffff !important;
+      outline-offset: 2px !important;
     }
   </style>
   <script type="importmap">
@@ -132,6 +324,44 @@
 <body>
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
+
+  <!-- Color-Blindness SVG Filters -->
+  <svg style="display: none;" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Protanopia Red-Blindness Adjuster -->
+      <filter id="protanopia-adjust">
+        <feColorMatrix type="matrix" values="
+          0.567, 0.433, 0.000, 0, 0
+          0.558, 0.442, 0.000, 0, 0
+          0.000, 0.242, 0.758, 0, 0
+          0.000, 0.000, 0.000, 1, 0" />
+      </filter>
+      <!-- Deuteranopia Green-Blindness Adjuster -->
+      <filter id="deuteranopia-adjust">
+        <feColorMatrix type="matrix" values="
+          0.625, 0.375, 0.000, 0, 0
+          0.700, 0.300, 0.000, 0, 0
+          0.000, 0.300, 0.700, 0, 0
+          0.000, 0.000, 0.000, 1, 0" />
+      </filter>
+      <!-- Tritanopia Blue-Blindness Adjuster -->
+      <filter id="tritanopia-adjust">
+        <feColorMatrix type="matrix" values="
+          0.950, 0.050, 0.000, 0, 0
+          0.000, 0.433, 0.567, 0, 0
+          0.000, 0.475, 0.525, 0, 0
+          0.000, 0.000, 0.000, 1, 0" />
+      </filter>
+      <!-- Achromatopsia Total Color-Blindness Filter -->
+      <filter id="achromatopsia-adjust">
+        <feColorMatrix type="matrix" values="
+          0.299, 0.587, 0.114, 0, 0
+          0.299, 0.587, 0.114, 0, 0
+          0.299, 0.587, 0.114, 0, 0
+          0.000, 0.000, 0.000, 1, 0" />
+      </filter>
+    </defs>
+  </svg>
 </body>
 
 </html>

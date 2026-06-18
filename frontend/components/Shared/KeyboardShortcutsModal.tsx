@@ -18,25 +18,75 @@ const shortcuts = [
   { key: 'Alt + I', mac: 'Ctrl + Opt + I', description: 'Switch Language (EN/NP)' },
   { key: 'Alt + =', mac: 'Ctrl + Opt + =', description: 'Increase Font Size' },
   { key: 'Alt + -', mac: 'Ctrl + Opt + -', description: 'Decrease Font Size' },
+  { key: 'Alt + Shift + A', mac: 'Ctrl + Opt + Shift + A', description: 'Toggle Accessibility Menu' },
   { key: 'Alt + C', mac: 'Ctrl + Opt + C', description: 'Toggle High Contrast' },
 ];
 
 export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ isOpen, onClose }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const { highContrast } = useAccessibility();
+  const previousActiveElement = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      // Trapping focus logic could be added here for full accessibility compliance
-      modalRef.current?.focus();
+      previousActiveElement.current = document.activeElement as HTMLElement;
+      document.body.style.overflow = 'hidden';
+      document.getElementById('root')?.setAttribute('aria-hidden', 'true');
+      
+      const focusableElements = modalRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex="0"]'
+      );
+      if (focusableElements && focusableElements.length > 0) {
+        (focusableElements[0] as HTMLElement).focus();
+      }
     }
 
-    return () => document.removeEventListener('keydown', handleEscape);
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.getElementById('root')?.removeAttribute('aria-hidden');
+      if (previousActiveElement.current) {
+        previousActiveElement.current.focus();
+      }
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isOpen) return;
+
+      if (e.key === 'Escape') {
+        onClose();
+        e.preventDefault();
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        const focusableElements = modalRef.current?.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex="0"]'
+        );
+        if (!focusableElements || focusableElements.length === 0) return;
+
+        const firstEl = focusableElements[0] as HTMLElement;
+        const lastEl = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstEl) {
+            lastEl.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastEl) {
+            firstEl.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -63,7 +113,7 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ 
           </div>
           <button 
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-secondary"
+            className="p-3 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-secondary"
             aria-label="Close shortcuts modal"
           >
             <X className="w-6 h-6" />

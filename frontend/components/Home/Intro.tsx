@@ -3,13 +3,16 @@
 
 import React from 'react';
 import { useAccessibility } from '../../contexts/AccessibilityContext';
-import { TRANSLATIONS, ABOUT_CONTENT, ABOUT_CONTENT_NP } from '../../constants';
+import { TRANSLATIONS, SIMPLIFIED_TRANSLATIONS, ABOUT_CONTENT, ABOUT_CONTENT_NP } from '../../constants';
 import { HeartHandshake, Users } from 'lucide-react';
 
 export const Intro: React.FC = () => {
-  const { language } = useAccessibility();
+  const { language, simplifiedMode } = useAccessibility();
   const t = TRANSLATIONS[language];
+  const st = SIMPLIFIED_TRANSLATIONS[language];
   const content = language === 'np' ? ABOUT_CONTENT_NP : ABOUT_CONTENT;
+
+  const introText = simplifiedMode && st.introText ? st.introText : t.introText;
 
   return (
     <section id="about" className="py-16 md:py-24 bg-white px-4">
@@ -18,7 +21,7 @@ export const Intro: React.FC = () => {
         <div className="w-24 h-1 bg-secondary mx-auto mb-10"></div>
         
         <p className="text-lg md:text-xl text-black leading-relaxed font-sans font-normal mb-12 text-justify md:text-center">
-          {t.introText}
+          {introText}
         </p>
 
         {/* New Commitment Block */}

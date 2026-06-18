@@ -58,6 +58,7 @@ export const NewsGrid: React.FC = () => {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
+              aria-pressed={activeCategory === cat}
               className={`px-6 py-3 rounded-full font-sans font-bold text-sm transition-all duration-300 border-2 
                 ${activeCategory === cat 
                   ? 'bg-secondary text-white border-secondary' 
@@ -107,35 +108,25 @@ export const NewsGrid: React.FC = () => {
                 </p>
 
                 {item.category === 'News' && item.externalUrl ? (
-                   <a 
-                     href={item.externalUrl} 
-                     target="_blank" 
-                     rel="noopener noreferrer"
-                     className="w-full"
-                     aria-label={`${t.readMore} ${item.title}`}
+                   <Button 
+                      href={item.externalUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-full justify-center items-center group-hover:bg-secondary group-hover:text-white"
+                      aria-label={`${t.readMore} ${item.title}`}
+                      variant="outline" 
                    >
-                     <Button 
-                        variant="outline" 
-                        className="w-full flex justify-center items-center group-hover:bg-secondary group-hover:text-white"
-                     >
-                       {t.readMore} <ExternalLink className="ml-2 w-4 h-4" />
-                     </Button>
-                   </a>
+                     {t.readMore} <ExternalLink className="ml-2 w-4 h-4" />
+                   </Button>
                 ) : (
-                   <Link 
-                     to={`/news/${item.id}`} 
-                     target="_blank" 
-                     rel="noopener noreferrer"
-                     className="w-full"
-                     aria-label={`${t.readMore} ${item.title}`}
+                   <Button 
+                      to={`/news/${item.id}`} 
+                      className="w-full justify-center items-center group-hover:bg-secondary group-hover:text-white"
+                      aria-label={`${t.readMore} ${item.title}`}
+                      variant="outline" 
                    >
-                     <Button 
-                        variant="outline" 
-                        className="w-full flex justify-center items-center group-hover:bg-secondary group-hover:text-white"
-                     >
-                       {t.readMore} <ArrowRight className="ml-2 w-4 h-4" />
-                     </Button>
-                   </Link>
+                     {t.readMore} <ArrowRight className="ml-2 w-4 h-4" />
+                   </Button>
                 )}
               </div>
             </div>

@@ -79,6 +79,8 @@ export const Testimonials: React.FC = () => {
             className="max-w-4xl mx-auto relative group"
             onMouseEnter={() => setIsPlaying(false)}
             onMouseLeave={() => setIsPlaying(true)}
+            onFocus={() => setIsPlaying(false)}
+            onBlur={() => setIsPlaying(true)}
             onKeyDown={handleKeyDown}
         >
             {/* Carousel Container */}

@@ -11,13 +11,29 @@ export const Navbar: React.FC = () => {
   const { language, setLanguage } = useAccessibility();
   const t = TRANSLATIONS[language];
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
+  const [isCalcOpen, setIsCalcOpen] = useState(false);
   const location = useLocation();
 
   const toggleResources = () => setIsResourcesOpen(!isResourcesOpen);
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+    if (isMenuOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isMenuOpen]);
+
   return (
-    <nav className="bg-primary border-b border-gray-100 sticky top-0 z-40">
+    <nav className="bg-primary border-b border-gray-100 sticky top-0 z-40" aria-label="Primary Navigation">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-24 items-center">
           {/* Logo Section */}
@@ -40,40 +56,56 @@ export const Navbar: React.FC = () => {
                 <Link to="/" className="text-gray-900 hover:text-secondary transition-colors whitespace-nowrap">{t.navHome}</Link>
                 
                 {/* About Dropdown */}
-                <div className="relative group">
+                <div
+                   className="relative group"
+                   onMouseEnter={() => setIsAboutOpen(true)}
+                   onMouseLeave={() => setIsAboutOpen(false)}
+                   onFocus={() => setIsAboutOpen(true)}
+                   onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setIsAboutOpen(false); }}
+                   onKeyDown={(e) => { if (e.key === 'Escape') setIsAboutOpen(false); }}
+                >
                    <button 
-                      className="flex items-center text-gray-900 hover:text-secondary transition-colors focus:outline-none whitespace-nowrap"
+                      className="flex items-center text-gray-900 hover:text-secondary focus:text-secondary focus:outline-none whitespace-nowrap focus:ring-2 focus:ring-secondary rounded px-1"
                       aria-haspopup="true"
+                      aria-expanded={isAboutOpen}
+                      onClick={() => setIsAboutOpen((o) => !o)}
                    >
                       {t.navAbout}
                       <ChevronDown className="w-4 h-4 ml-1" aria-hidden="true" />
                    </button>
-                   <div className="absolute top-full left-0 w-56 bg-white shadow-xl rounded-lg border border-gray-100 hidden group-hover:block group-focus-within:block pt-4">
+                   <div className={`absolute top-full left-0 w-56 bg-white shadow-xl rounded-lg border border-gray-100 group-hover:block group-focus-within:block pt-4 ${isAboutOpen ? 'block' : 'hidden'}`}>
                       <div className="py-2 flex flex-col bg-white rounded-lg">
-                        <Link to="/about" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm">{t.navProfile}</Link>
-                        <Link to="/team" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm">{t.navTeam}</Link>
+                        <Link to="/about" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm" onClick={() => setIsAboutOpen(false)}>{t.navProfile}</Link>
+                        <Link to="/team" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm" onClick={() => setIsAboutOpen(false)}>{t.navTeam}</Link>
                       </div>
                    </div>
                 </div>
                 <Link to="/practice-areas" className="text-gray-900 hover:text-secondary transition-colors whitespace-nowrap">{t.navPractice}</Link>
                 
                 {/* Resources Dropdown */}
-                <div className="relative group">
+                <div
+                   className="relative group"
+                   onMouseEnter={() => setIsResourcesOpen(true)}
+                   onMouseLeave={() => setIsResourcesOpen(false)}
+                   onFocus={() => setIsResourcesOpen(true)}
+                   onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setIsResourcesOpen(false); }}
+                   onKeyDown={(e) => { if (e.key === 'Escape') setIsResourcesOpen(false); }}
+                >
                    <button 
-                      className="flex items-center text-gray-900 hover:text-secondary transition-colors focus:outline-none whitespace-nowrap"
+                      className="flex items-center text-gray-900 hover:text-secondary focus:text-secondary focus:outline-none whitespace-nowrap focus:ring-2 focus:ring-secondary rounded px-1"
                       aria-haspopup="true"
-                      aria-expanded={isResourcesOpen} // Assuming state tracking or group hover creates open state visuals
-                      // If using group-hover, aria-expanded might not dynamically update with JS without listeners, but better to denote capability.
+                      aria-expanded={isResourcesOpen}
+                      onClick={() => setIsResourcesOpen((o) => !o)}
                    >
                       {t.resources}
                       <ChevronDown className="w-4 h-4 ml-1" aria-hidden="true" />
                    </button>
-                   <div className="absolute top-full left-0 w-56 bg-white shadow-xl rounded-lg border border-gray-100 hidden group-hover:block group-focus-within:block pt-4">
+                   <div className={`absolute top-full left-0 w-56 bg-white shadow-xl rounded-lg border border-gray-100 group-hover:block group-focus-within:block pt-4 ${isResourcesOpen ? 'block' : 'hidden'}`}>
                       <div className="py-2 flex flex-col bg-white rounded-lg">
-                        <Link to="/news" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm">{t.navNews}</Link>
-                        <Link to="/notices" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm">{t.navNotices}</Link>
-                        <Link to="/research" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm">{t.navResearch}</Link>
-                        <Link to="/faq" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm">{t.navFAQ}</Link>
+                        <Link to="/news" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm" onClick={() => setIsResourcesOpen(false)}>{t.navNews}</Link>
+                        <Link to="/notices" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm" onClick={() => setIsResourcesOpen(false)}>{t.navNotices}</Link>
+                        <Link to="/research" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm" onClick={() => setIsResourcesOpen(false)}>{t.navResearch}</Link>
+                        <Link to="/faq" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm" onClick={() => setIsResourcesOpen(false)}>{t.navFAQ}</Link>
                       </div>
                    </div>
                 </div>
@@ -83,7 +115,7 @@ export const Navbar: React.FC = () => {
                 {/* Language Switcher (Desktop) */}
                 <button 
                     onClick={() => setLanguage(language === 'en' ? 'np' : 'en')}
-                    className="flex items-center gap-1 px-3 py-1 bg-gray-50 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors text-sm font-bold ml-2"
+                    className="flex items-center justify-center min-h-[44px] min-w-[44px] px-3 bg-gray-50 rounded-full border border-gray-200 hover:bg-gray-100 focus:bg-gray-100 transition-colors text-sm font-bold ml-2 focus:outline-none focus:ring-2 focus:ring-secondary"
                     aria-label={language === 'en' ? 'Switch to Nepali' : 'Switch to English'}
                 >
                     {language === 'en' ? 'NP' : 'EN'}
@@ -102,49 +134,62 @@ export const Navbar: React.FC = () => {
                 </a>
 
                 {/* Calculators Dropdown */}
-                <div className="relative group hidden md:block">
-                   <div 
-                      className="flex items-center"
-                   >
-                      <Button variant="primary" size="sm" className="shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-1" aria-haspopup="true">
+                <div
+                   className="relative group hidden md:block"
+                   onMouseEnter={() => setIsCalcOpen(true)}
+                   onMouseLeave={() => setIsCalcOpen(false)}
+                   onFocus={() => setIsCalcOpen(true)}
+                   onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setIsCalcOpen(false); }}
+                   onKeyDown={(e) => { if (e.key === 'Escape') setIsCalcOpen(false); }}
+                >
+                   <div className="flex items-center">
+                      <Button variant="primary" size="sm" className="shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-1" aria-haspopup="true" aria-expanded={isCalcOpen} onClick={() => setIsCalcOpen((o) => !o)}>
                         {t.calculator}
                         <ChevronDown className="w-4 h-4" aria-hidden="true" />
                       </Button>
                    </div>
-                   <div className="absolute top-full right-0 w-56 bg-white shadow-xl rounded-lg border border-gray-100 hidden group-hover:block group-focus-within:block pt-4">
+                   <div className={`absolute top-full right-0 w-56 bg-white shadow-xl rounded-lg border border-gray-100 group-hover:block group-focus-within:block pt-4 ${isCalcOpen ? 'block' : 'hidden'}`}>
                       <div className="py-2 flex flex-col bg-white rounded-lg">
-                        <Link to="/calculator/legal-fee" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm">
+                        <Link to="/calculator/legal-fee" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm" onClick={() => setIsCalcOpen(false)}>
                           {language === 'np' ? 'कानूनी शुल्क क्याल्कुलेटर' : 'Legal Fee Calculator'}
                         </Link>
-                        <Link to="/calculator/other" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm">
+                        <Link to="/calculator/other" className="px-4 py-3 hover:bg-green-50 text-gray-900 hover:text-secondary transition-colors text-sm" onClick={() => setIsCalcOpen(false)}>
                           {language === 'np' ? 'अन्य क्याल्कुलेटरहरू' : 'Other Calculators'}
                         </Link>
                       </div>
                    </div>
                 </div>
-
-                {/* Mobile Menu Button */}
-                <button 
-                    className="lg:hidden p-2 text-gray-600 hover:text-secondary transition-colors"
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-                    aria-expanded={isMenuOpen}
-                >
-                    {isMenuOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
-                </button>
             </div>
           </div>
+
+          {/* Mobile Menu Button - direct child of the top row so it stays visible on mobile */}
+          <button 
+              className="lg:hidden p-3 text-gray-600 hover:text-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-secondary rounded-full"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
+          >
+              {isMenuOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
+          </button>
         </div>
       </div>
 
         {/* Mobile Menu */}
         <div 
+            id="mobile-menu"
             className={`fixed inset-0 z-50 lg:hidden transition-opacity duration-300 ${
-                isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                isMenuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
             }`}
         >
             {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMenuOpen(false)} />
+            <button 
+              type="button" 
+              tabIndex={-1} 
+              aria-hidden="true" 
+              onClick={() => setIsMenuOpen(false)} 
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm w-full h-full border-none cursor-default" 
+            />
             
             {/* Menu Panel */}
             <div className={`absolute right-0 top-0 h-full w-[300px] bg-white shadow-2xl transform transition-transform duration-300 ease-out ${
@@ -153,7 +198,11 @@ export const Navbar: React.FC = () => {
                 <div className="flex flex-col h-full">
                     <div className="p-6 border-b border-gray-100 flex justify-between items-center">
                         <span className="text-xl font-serif font-bold text-primary">{t.firmName}</span>
-                        <button onClick={() => setIsMenuOpen(false)} className="p-2 text-gray-500 hover:text-red-500 transition-colors">
+                        <button 
+                          onClick={() => setIsMenuOpen(false)} 
+                          className="p-3 text-gray-500 hover:text-red-500 transition-colors focus:outline-none focus:ring-2 focus:ring-secondary rounded-full"
+                          aria-label="Close menu"
+                        >
                             <X className="w-6 h-6" />
                         </button>
                     </div>

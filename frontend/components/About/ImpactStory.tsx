@@ -2,13 +2,15 @@
 
 
 import React from 'react';
-import { ABOUT_CONTENT, ABOUT_CONTENT_NP, TRANSLATIONS } from '../../constants';
+import { ABOUT_CONTENT, ABOUT_CONTENT_NP, SIMPLIFIED_ABOUT_CONTENT, SIMPLIFIED_ABOUT_CONTENT_NP, TRANSLATIONS } from '../../constants';
 import { Quote, Trophy } from 'lucide-react';
 import { useAccessibility } from '../../contexts/AccessibilityContext';
 
 export const ImpactStory: React.FC = () => {
-  const { language } = useAccessibility();
-  const content = language === 'np' ? ABOUT_CONTENT_NP : ABOUT_CONTENT;
+  const { language, simplifiedMode } = useAccessibility();
+  const content = simplifiedMode
+    ? (language === 'np' ? SIMPLIFIED_ABOUT_CONTENT_NP : SIMPLIFIED_ABOUT_CONTENT)
+    : (language === 'np' ? ABOUT_CONTENT_NP : ABOUT_CONTENT);
   
   return (
     <section>

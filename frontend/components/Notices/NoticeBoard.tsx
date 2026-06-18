@@ -83,12 +83,13 @@ export const NoticeBoard: React.FC = () => {
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
+            aria-pressed={activeCategory === cat}
             className={`flex items-center gap-2 px-6 py-3 rounded-full font-sans font-bold text-sm transition-all duration-300 border-2
               ${activeCategory === cat 
                 ? 'bg-secondary text-white border-secondary shadow-md' 
                 : 'bg-white text-black border-gray-200 hover:border-secondary hover:text-secondary'}`}
           >
-            {getIcon(cat)}
+            <span aria-hidden="true" className="flex items-center">{getIcon(cat)}</span>
             {getCategoryLabel(cat)}
           </button>
         ))}

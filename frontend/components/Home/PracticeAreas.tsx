@@ -41,24 +41,21 @@ export const PracticeAreas: React.FC = () => {
                 </p>
               </div>
                 
-              <Link to={`/practice-areas#${category.id}`}>
-                <button 
-                  className="flex items-center text-secondary font-sans font-bold hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 rounded p-1 w-fit group/btn"
-                >
-                  {t.learnMore} <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                </button>
+              <Link 
+                to={`/practice-areas#${category.id}`}
+                className="flex items-center text-secondary font-sans font-bold hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 rounded p-1 w-fit group/btn"
+              >
+                {t.learnMore} <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
               </Link>
             </div>
           ))}
         </div>
         
         <div className="mt-16 text-center">
-             <Link to="/practice-areas">
-                <Button variant="primary" className="px-10 py-4 text-lg group flex items-center justify-center mx-auto">
-                   {t.exploreServices}
-                   <ArrowRight className="ml-3 w-5 h-5 transition-transform duration-300 group-hover:translate-x-2" />
-                </Button>
-             </Link>
+             <Button to="/practice-areas" variant="primary" className="px-10 py-4 text-lg group flex items-center justify-center mx-auto">
+                {t.exploreServices}
+                <ArrowRight className="ml-3 w-5 h-5 transition-transform duration-300 group-hover:translate-x-2" />
+             </Button>
         </div>
       </div>
     </section>
